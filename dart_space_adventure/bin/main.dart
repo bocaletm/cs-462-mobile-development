@@ -144,8 +144,8 @@ class Game {
     }
   }
 }
-
-void main(List<String> arguments) { 
-  Game game = new Game();
+//TODO: fix async
+void main(List<String> arguments) async { 
+  Game game = await new Game();
   game.startGame();
 }
