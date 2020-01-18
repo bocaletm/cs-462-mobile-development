@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-import 'package:dart_space_adventure/Exceptions.dart';
+import 'package:dart_space_adventure/space_adventure.dart';
 
 class Planets {
   static const String _planets_uri = 'https://swapi.co/api/planets/';

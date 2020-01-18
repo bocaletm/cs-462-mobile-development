@@ -1,6 +1,6 @@
-import 'package:dart_space_adventure/Game.dart';
+import 'package:dart_space_adventure/space_adventure.dart';
 
 void main(List<String> arguments) { 
-  var game = Game();
+  final game = Game();
   game.startGame();
 }

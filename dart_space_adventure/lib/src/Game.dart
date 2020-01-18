@@ -1,7 +1,6 @@
 import 'dart:core';
 import 'dart:io';
-import 'package:dart_space_adventure/Message.dart';
-import 'package:dart_space_adventure/Planets.dart';
+import 'package:dart_space_adventure/space_adventure.dart';
 
 class Game {
   Message _message;

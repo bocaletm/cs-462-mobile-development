@@ -1,4 +1,4 @@
-import 'package:dart_space_adventure/Planets.dart';
+import 'package:dart_space_adventure/space_adventure.dart';
 
 enum MessageType {
   intro,
