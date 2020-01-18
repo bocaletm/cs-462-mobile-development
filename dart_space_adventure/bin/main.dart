@@ -64,18 +64,14 @@ class RestException implements Exception {
 class Planets {
   static const String _planets_uri = 'https://swapi.co/api/planets/';
   static const int _numPlanets = 9;
-  bool complete;
+  bool complete = true;
   Map<String,String> _planetList;
 
-  Planets() {
-    populatePlanets();
-  }
-
-  Planets.staticJson(String json_filepath) {
+  void populateFromStaticJson(String json_filepath) {
     print("using static json");
   }
 
-  void populatePlanets() async{
+  void populateFromAPI() async{
     var client = http.Client();
     var response;
     var jsonParsed;
@@ -96,6 +92,7 @@ class Planets {
         var climate = jsonParsed['climate'];
         print('name: $name  climate: $climate');
       } else {
+        this.complete = false;
         throw new RestException(response.statusCode);
       }
     }
@@ -120,7 +117,7 @@ class Game {
     }
   }
 
-  void startGame() {
+  void startGame() async {
     _message.printMessage(MessageType.intro);
     _message.printMessage(MessageType.nameprompt);
     _username = stdin.readLineSync();
@@ -135,7 +132,11 @@ class Game {
         _message.printMessage(MessageType.misunderstood);
       }
     }
-    sleep(new Duration(seconds: 3));
+    await _planets.populateFromAPI();
+    if (_planets.complete != true) {
+      _planets.populateFromStaticJson('.');
+    }
+
     if (_selection  == 'Y') {
       _message.printMessage(MessageType.randomprompt);
     } else if (_selection  == 'N') {
@@ -145,7 +146,7 @@ class Game {
   }
 }
 //TODO: fix async
-void main(List<String> arguments) async { 
-  Game game = await new Game();
+void main(List<String> arguments) { 
+  Game game = new Game();
   game.startGame();
 }
