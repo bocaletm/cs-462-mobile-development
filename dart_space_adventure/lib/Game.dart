@@ -1,4 +1,3 @@
-
 import 'dart:core';
 import 'dart:io';
 import 'package:dart_space_adventure/Message.dart';
