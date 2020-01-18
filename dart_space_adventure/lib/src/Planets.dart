@@ -6,7 +6,7 @@ class Planets {
   static const String _planets_uri = 'https://swapi.co/api/planets/';
   static const int _numPlanets = 9;
   bool complete;
-  Map<String,String> _planetList;
+  final Map<String,String> _planetList = new Map();
 
   void populateFromStaticJson(String json_filepath) {
     print('using static json');
@@ -29,14 +29,14 @@ class Planets {
       }
       if (response.statusCode == 200) {
         jsonParsed = convert.jsonDecode(response.body);
-        //_planetList.putIfAbsent(jsonParsed['name'],jsonParsed['climate']);
         var name = jsonParsed['name'];
         var climate = jsonParsed['climate'];
-        print('name: $name  climate: $climate');
+        _planetList[name.toString()] = climate.toString();
       } else {
         complete = false;
         throw RestException(response.statusCode);
       }
+      print(_planetList);
     }
   }
 }
