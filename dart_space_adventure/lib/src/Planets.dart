@@ -67,8 +67,17 @@ class Planets {
         if (response.statusCode == 200) {
           jsonParsed = convert.jsonDecode(response.body);
           var name = jsonParsed['name'];
-          var climate = jsonParsed['climate'].toString();
-          _planetList[name.toString()] = 'A distant, $climate planet';
+          var climate = jsonParsed['climate'];
+          var terrain = jsonParsed['terrain'];
+          var size = '';
+          if (int.parse(jsonParsed['diameter']) < 10000) {
+            size = 'small,';
+          } else if (int.parse(jsonParsed['diameter']) < 100000) {
+            size = 'medium,';
+          } else {
+            size = 'giant,';
+          }
+          _planetList[name.toString()] = 'A $size distant, $climate planet composed of $terrain';
         } else {
           throw RestException(response.statusCode);
         }
@@ -76,8 +85,10 @@ class Planets {
           complete = false;
           if (e is SocketException) {
             stderr.write('ERROR: Unable to reach $url\n');
-          } else {
+          } else if (e is RestException){
             stderr.write(e.errMsg());
+          } else {
+            stderr.write('ERROR: Unknown\n');
           }
       }
     }

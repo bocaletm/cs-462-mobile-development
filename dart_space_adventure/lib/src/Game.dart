@@ -58,15 +58,16 @@ class Game {
         _message.printMessage(MessageType.misunderstood);
       }
     }
+    List nameDescription;
     if (_selection  == 'Y') {
       _message.printMessage(MessageType.randomprompt);
-      print(_planets.getRandom());
+      nameDescription = _planets.getRandom();
     } else if (_selection  == 'N') {
       _message.printMessage(MessageType.planetprompt);
-      var nameDescription = _planets.getUserSelection(stdin.readLineSync());
-      _message.printMessage(MessageType.traveling, planetName: nameDescription[0]);
-      _message.printMessage(MessageType.arrived, planetName: nameDescription[0], planetDescription: nameDescription[1]);
+      nameDescription = _planets.getUserSelection(stdin.readLineSync());
     }
+    _message.printMessage(MessageType.traveling, planetName: nameDescription[0]);
+    _message.printMessage(MessageType.arrived, planetName: nameDescription[0], planetDescription: nameDescription[1]);
   }
 
   void startGame() {
