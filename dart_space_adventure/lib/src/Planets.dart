@@ -37,7 +37,6 @@ class Planets {
     var jsonParsed;
     try {
       jsonParsed = convert.jsonDecode(await File(jsonFilepath).readAsString())['planets'];
-      print(jsonParsed);
       for (var entry in jsonParsed) {
           var name = entry['name'];
           var description = entry['description'];
