@@ -33,7 +33,6 @@ class Planets {
   }
 
   void populateFromStaticJson(String jsonFilepath) async{
-    print('using static json');
     var jsonParsed;
     try {
       jsonParsed = convert.jsonDecode(await File(jsonFilepath).readAsString())['planets'];
