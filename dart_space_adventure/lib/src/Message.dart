@@ -12,7 +12,7 @@ enum MessageType {
 class Message {
   void printMessage(MessageType message, {
       String userName = 'Roger Wilco', 
-      String systemName = 'Solar System', 
+      String systemName = 'Unnamed System', 
       String planetName = 'Unexplored Planet',
       String planetDescription = 'Nothing is known about this planet'
   }) {

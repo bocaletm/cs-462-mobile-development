@@ -9,13 +9,13 @@ class Planets {
   static const int _numPlanets = 8;
   static const int timesToTry = 10;
   bool complete;
-  final Map<String,String> _planetList;
+  Map<String,String> _planetList;
 
   Planets() : complete = false, _planetList = new Map();
 
   List getRandom() {
     var nameDescription = List(2);
-    var randKey = _planetList.keys.elementAt(new Random().nextInt(_planetList.length));
+    var randKey = _planetList.keys.elementAt(Random().nextInt(_planetList.length));
     nameDescription[0] = randKey;
     nameDescription[1] = _planetList[randKey];
     return nameDescription;
@@ -32,8 +32,14 @@ class Planets {
     return nameDescription;
   }
 
-  void populateFromStaticJson(String json_filepath) {
+  void populateFromStaticJson(String jsonFilepath) async{
     print('using static json');
+    try {
+      print(convert.jsonDecode(await File(jsonFilepath).readAsString()));
+    } catch(e) {
+      stderr.write('ERROR: Could not read file at $jsonFilepath\n');
+      complete = false;
+    }
   }
 
   void populateFromAPI() async{
@@ -61,7 +67,7 @@ class Planets {
       } catch(e) {
           complete = false;
           if (e is SocketException) {
-            stderr.write('ERROR: Unable to reach $url');
+            stderr.write('ERROR: Unable to reach $url\n');
           } else {
             stderr.write(e.errMsg());
           }

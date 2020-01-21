@@ -13,7 +13,7 @@ class Game {
       _planets = Planets();
     } 
     catch (e) {
-      stderr.write('ERROR: Unable to instantiate Planets');
+      stderr.write('ERROR: Unable to instantiate Planets\n');
     }
   }
 
@@ -37,7 +37,13 @@ class Game {
   void readPlanets() async {
     await _planets.populateFromAPI();
     if (_planets.complete != true) {
-      _planets.populateFromStaticJson('.');
+      var pwd = Directory.current.path;
+      print(pwd);
+      await _planets.populateFromStaticJson('$pwd/assets/data/planets.json');
+    }
+    if (_planets.complete != true) {
+      stderr.write('ERROR: Unable to read planet data\n');
+      exit(1);
     }
   }
 
