@@ -15,7 +15,7 @@ class Message {
       case MessageType.intro:
         print(
           'Welcome to the Solar System!\n'
-          'There are 9 planets to explore.'
+          'There are 8 planets to explore.'
         );
         break;
       case MessageType.greeting:

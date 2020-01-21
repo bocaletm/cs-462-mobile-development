@@ -4,9 +4,29 @@ import 'package:dart_space_adventure/space_adventure.dart';
 
 class Planets {
   static const String _planets_uri = 'https://swapi.co/api/planets/';
-  static const int _numPlanets = 9;
+  static const int _numPlanets = 8;
+  static const int timesToTry = 10;
   bool complete;
-  final Map<String,String> _planetList = new Map();
+  final Map<String,String> _planetList;
+
+  Planets() : complete = false, _planetList = new Map();
+
+  String getRandom() {
+    var error = true;
+    for (var i = 0; i < timesToTry; i++) {
+      if (complete) {
+        return 'random';
+        error = false;
+      } 
+      if (error) {
+        throw Exception('ERROR: Could not load planet info.');
+      }
+    }
+  }
+
+  String getUserSelection(String planetName) {
+    return '$planetName';
+  }
 
   void populateFromStaticJson(String json_filepath) {
     print('using static json');
@@ -36,7 +56,6 @@ class Planets {
         complete = false;
         throw RestException(response.statusCode);
       }
-      print(_planetList);
     }
   }
 }
