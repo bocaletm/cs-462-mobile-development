@@ -8,9 +8,9 @@ class Game {
   String _username;
   String _selection;
 
-  Game() : _message = Message(), _username = 'Roger Wilco', _selection = '' {
+  Game(String planetsUri) : _message = Message(), _username = 'Roger Wilco', _selection = '' {
     try {
-      _planets = Planets();
+      _planets = Planets(planetsUri);
     } 
     catch (e) {
       stderr.write('ERROR: Unable to instantiate Planets\n');
@@ -18,8 +18,8 @@ class Game {
   }
 
   void runGame() async {
-    startGame();
     await readPlanets();
+    startGame();
     getUserName();
     greetUser();
     useRandomPlanets();
@@ -35,12 +35,12 @@ class Game {
   }
 
   void readPlanets() async {
-    await _planets.populateFromAPI();
-    if (_planets.complete != true) {
-      var pwd = Directory.current.path;
-      print(pwd);
-      await _planets.populateFromStaticJson('$pwd/assets/data/planets.json');
+    if (_planets.planetsUri.contains('http')) { 
+      await _planets.populateFromAPI();
+    } else {
+      await _planets.populateFromStaticJson();
     }
+
     if (_planets.complete != true) {
       stderr.write('ERROR: Unable to read planet data\n');
       exit(1);
@@ -70,6 +70,6 @@ class Game {
   }
 
   void startGame() {
-    _message.printMessage(MessageType.intro);
+    _message.printMessage(MessageType.intro,systemName: _planets.systemName);
   }
 }

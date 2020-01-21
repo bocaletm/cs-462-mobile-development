@@ -5,13 +5,14 @@ import 'package:dart_space_adventure/space_adventure.dart';
 import 'dart:math';
 
 class Planets {
-  static const String _planets_uri = 'https://swapi.co/api/planets/';
+  final String planetsUri;
+  String systemName;
   static const int _numPlanets = 8;
   static const int timesToTry = 10;
   bool complete;
-  Map<String,String> _planetList;
+  final Map<String,String> _planetList;
 
-  Planets() : complete = false, _planetList = new Map();
+  Planets(this.planetsUri) : complete = false, _planetList = new Map(), systemName = 'Galaxy Far, Far Away';
 
   List getRandom() {
     var nameDescription = List(2);
@@ -23,7 +24,7 @@ class Planets {
 
   List getUserSelection(String planetName) {
     var nameDescription = List(2);
-    var description = 'mysterious';
+    var description = 'A mysterious planet.';
     if (_planetList.containsKey(planetName)) {
       description = _planetList[planetName];
     } 
@@ -32,18 +33,19 @@ class Planets {
     return nameDescription;
   }
 
-  void populateFromStaticJson(String jsonFilepath) async{
+  void populateFromStaticJson() async{
     var jsonParsed;
     try {
-      jsonParsed = convert.jsonDecode(await File(jsonFilepath).readAsString())['planets'];
-      for (var entry in jsonParsed) {
+      jsonParsed = convert.jsonDecode(await File(planetsUri).readAsString());
+      systemName = jsonParsed['name'];
+      for (var entry in jsonParsed['planets']) {
           var name = entry['name'];
           var description = entry['description'];
           _planetList[name.toString()] = description.toString();
       }
       complete = true;
     } catch(e) {
-      stderr.write('ERROR: Could not read file at $jsonFilepath\n');
+      stderr.write('ERROR: Could not read file at $planetsUri\n');
       complete = false;
     }
   }
@@ -55,7 +57,7 @@ class Planets {
     complete = true;
     String url;
     for (var i = 1; i <= _numPlanets; i++) {
-      url = '$_planets_uri$i';
+      url = '$planetsUri$i';
       response = null;
       try{
         response = await client.get(url);
