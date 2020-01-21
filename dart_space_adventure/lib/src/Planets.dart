@@ -7,7 +7,7 @@ import 'dart:math';
 class Planets {
   final String planetsUri;
   String systemName;
-  static const int _numPlanets = 8;
+  static const int _numPlanets = 9;
   static const int timesToTry = 10;
   bool complete;
   final Map<String,String> _planetList;
