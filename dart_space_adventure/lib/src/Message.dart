@@ -46,7 +46,7 @@ class Message {
         print('Traveling to $planetName...');
         break;
       case MessageType.arrived:
-        print('Arrived at $planetName. A distant, $planetDescription planet');
+        print('Arrived at $planetName. $planetDescription');
         break;
     }
   }

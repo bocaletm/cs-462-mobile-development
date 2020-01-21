@@ -34,8 +34,14 @@ class Planets {
 
   void populateFromStaticJson(String jsonFilepath) async{
     print('using static json');
+    var jsonParsed;
     try {
-      print(convert.jsonDecode(await File(jsonFilepath).readAsString()));
+      jsonParsed = convert.jsonDecode(await File(jsonFilepath).readAsString())['planets'];
+      for (var entry in jsonParsed) {
+          var name = entry['name'];
+          var description = entry['description'];
+          _planetList[name.toString()] = description.toString();
+      }
     } catch(e) {
       stderr.write('ERROR: Could not read file at $jsonFilepath\n');
       complete = false;
@@ -59,8 +65,8 @@ class Planets {
         if (response.statusCode == 200) {
           jsonParsed = convert.jsonDecode(response.body);
           var name = jsonParsed['name'];
-          var climate = jsonParsed['climate'];
-          _planetList[name.toString()] = climate.toString();
+          var climate = jsonParsed['climate'].toString();
+          _planetList[name.toString()] = 'A distant, $climate planet';
         } else {
           throw RestException(response.statusCode);
         }
