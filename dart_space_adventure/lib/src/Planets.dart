@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:dart_space_adventure/space_adventure.dart';
+import 'dart:math';
 
 class Planets {
   static const String _planets_uri = 'https://swapi.co/api/planets/';
@@ -11,21 +13,23 @@ class Planets {
 
   Planets() : complete = false, _planetList = new Map();
 
-  String getRandom() {
-    var error = true;
-    for (var i = 0; i < timesToTry; i++) {
-      if (complete) {
-        return 'random';
-        error = false;
-      } 
-      if (error) {
-        throw Exception('ERROR: Could not load planet info.');
-      }
-    }
+  List getRandom() {
+    var nameDescription = List(2);
+    var randKey = _planetList.keys.elementAt(new Random().nextInt(_planetList.length));
+    nameDescription[0] = randKey;
+    nameDescription[1] = _planetList[randKey];
+    return nameDescription;
   }
 
-  String getUserSelection(String planetName) {
-    return '$planetName';
+  List getUserSelection(String planetName) {
+    var nameDescription = List(2);
+    var description = 'mysterious';
+    if (_planetList.containsKey(planetName)) {
+      description = _planetList[planetName];
+    } 
+    nameDescription[0] = planetName;
+    nameDescription[1] = description;
+    return nameDescription;
   }
 
   void populateFromStaticJson(String json_filepath) {
@@ -43,18 +47,24 @@ class Planets {
       response = null;
       try{
         response = await client.get(url);
-      } 
-      catch(e) {
-        complete = false;
-      }
-      if (response.statusCode == 200) {
-        jsonParsed = convert.jsonDecode(response.body);
-        var name = jsonParsed['name'];
-        var climate = jsonParsed['climate'];
-        _planetList[name.toString()] = climate.toString();
-      } else {
-        complete = false;
-        throw RestException(response.statusCode);
+        if (response == null) {
+          throw RestException('null');
+        }
+        if (response.statusCode == 200) {
+          jsonParsed = convert.jsonDecode(response.body);
+          var name = jsonParsed['name'];
+          var climate = jsonParsed['climate'];
+          _planetList[name.toString()] = climate.toString();
+        } else {
+          throw RestException(response.statusCode);
+        }
+      } catch(e) {
+          complete = false;
+          if (e is SocketException) {
+            stderr.write('ERROR: Unable to reach $url');
+          } else {
+            stderr.write(e.errMsg());
+          }
       }
     }
   }

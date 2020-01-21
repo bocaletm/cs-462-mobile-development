@@ -13,7 +13,7 @@ class Game {
       _planets = Planets();
     } 
     catch (e) {
-      print(e.errMsg());
+      stderr.write('ERROR: Unable to instantiate Planets');
     }
   }
 
@@ -29,8 +29,9 @@ class Game {
     _message.printMessage(MessageType.nameprompt);
     _username = stdin.readLineSync();
   }
+
   void greetUser() {
-    _message.printMessage(MessageType.greeting,_username);
+    _message.printMessage(MessageType.greeting,userName: _username);
   }
 
   void readPlanets() async {
@@ -56,7 +57,9 @@ class Game {
       print(_planets.getRandom());
     } else if (_selection  == 'N') {
       _message.printMessage(MessageType.planetprompt);
-      print(_planets.getUserSelection(stdin.readLineSync()));
+      var nameDescription = _planets.getUserSelection(stdin.readLineSync());
+      _message.printMessage(MessageType.traveling, planetName: nameDescription[0]);
+      _message.printMessage(MessageType.arrived, planetName: nameDescription[0], planetDescription: nameDescription[1]);
     }
   }
 

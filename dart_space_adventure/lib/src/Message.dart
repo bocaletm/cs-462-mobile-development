@@ -1,30 +1,31 @@
-import 'package:dart_space_adventure/space_adventure.dart';
-
 enum MessageType {
   intro,
   greeting,
   nameprompt,
   randomprompt,
   planetprompt,
-  misunderstood
+  misunderstood,
+  traveling,
+  arrived
 }
 
 class Message {
-  void printMessage(MessageType message, [String username]) {
+  void printMessage(MessageType message, {
+      String userName = 'Roger Wilco', 
+      String systemName = 'Solar System', 
+      String planetName = 'Unexplored Planet',
+      String planetDescription = 'Nothing is known about this planet'
+  }) {
     switch (message) {
       case MessageType.intro:
         print(
-          'Welcome to the Solar System!\n'
+          'Welcome to the $systemName!\n'
           'There are 8 planets to explore.'
         );
         break;
       case MessageType.greeting:
-        var name = 'Roger Wilco';
-        if (username != null) {
-          name = username;
-        }
         print(
-          'Nice to meet you, $name. My name is Eliza, '
+          'Nice to meet you, $userName. My name is Eliza, '
           'I\'m an old friend of Alexa\n'
           'Let\'s go on an adventure!'
         );
@@ -41,10 +42,12 @@ class Message {
       case MessageType.misunderstood:
         print('Sorry. I didn\'t get that');
         break;
+      case MessageType.traveling:
+        print('Traveling to $planetName...');
+        break;
+      case MessageType.arrived:
+        print('Arrived at $planetName. A distant, $planetDescription planet');
+        break;
     }
-  }
-
-  void printPlanets(Planets planets){
-    print('printing planets');
   }
 }
