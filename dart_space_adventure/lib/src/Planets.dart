@@ -49,11 +49,25 @@ class Planets {
       complete = false;
     }
   }
+  
+  void getNameDescriptionFromJson(var jsonParsed) {
+    var name = jsonParsed['name'];
+    var climate = jsonParsed['climate'];
+    var terrain = jsonParsed['terrain'];
+    var size = '';
+    if (int.parse(jsonParsed['diameter']) < 10000) {
+      size = 'small,';
+    } else if (int.parse(jsonParsed['diameter']) < 100000) {
+      size = 'medium,';
+    } else {
+      size = 'giant,';
+    }
+    _planetList[name.toString()] = 'A $size distant, $climate planet composed of $terrain';
+  }
 
   void populateFromAPI() async{
     var client = http.Client();
     var response;
-    var jsonParsed;
     complete = true;
     String url;
     for (var i = 1; i <= _numPlanets; i++) {
@@ -65,19 +79,7 @@ class Planets {
           throw RestException('null');
         }
         if (response.statusCode == 200) {
-          jsonParsed = convert.jsonDecode(response.body);
-          var name = jsonParsed['name'];
-          var climate = jsonParsed['climate'];
-          var terrain = jsonParsed['terrain'];
-          var size = '';
-          if (int.parse(jsonParsed['diameter']) < 10000) {
-            size = 'small,';
-          } else if (int.parse(jsonParsed['diameter']) < 100000) {
-            size = 'medium,';
-          } else {
-            size = 'giant,';
-          }
-          _planetList[name.toString()] = 'A $size distant, $climate planet composed of $terrain';
+          getNameDescriptionFromJson(convert.jsonDecode(response.body));
         } else {
           throw RestException(response.statusCode);
         }

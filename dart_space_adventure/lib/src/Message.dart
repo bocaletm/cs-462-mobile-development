@@ -10,7 +10,7 @@ enum MessageType {
 }
 
 class Message {
-  void printMessage(MessageType message, {
+  bool printMessage(MessageType message, {
       String userName = 'Roger Wilco', 
       String systemName = 'Unnamed System', 
       String planetName = 'Unexplored Planet',
@@ -49,5 +49,6 @@ class Message {
         print('Arrived at $planetName. $planetDescription');
         break;
     }
+    return true;
   }
 }

@@ -49,15 +49,11 @@ class Game {
 
   void useRandomPlanets() {
     _message.printMessage(MessageType.randomprompt);
-    var invalidSelection = true;
-    while (invalidSelection) {
+    do {
       _selection  = stdin.readLineSync();
       _selection  = _selection.toUpperCase();
-      invalidSelection = _selection  != 'Y' && _selection  != 'N'; 
-      if (invalidSelection) {
-        _message.printMessage(MessageType.misunderstood);
-      }
-    }
+    } while (_selection  != 'Y' && _selection  != 'N' && _message.printMessage(MessageType.misunderstood));
+    
     List nameDescription;
     if (_selection  == 'Y') {
       _message.printMessage(MessageType.randomprompt);
