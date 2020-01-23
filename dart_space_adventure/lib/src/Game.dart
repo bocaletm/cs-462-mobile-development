@@ -48,8 +48,8 @@ class Game {
   }
 
   void useRandomPlanets() {
-    _message.printMessage(MessageType.randomprompt);
     do {
+      _message.printMessage(MessageType.randomprompt);
       _selection  = stdin.readLineSync();
       _selection  = _selection.toUpperCase();
     } while (_selection  != 'Y' && _selection  != 'N' && _message.printMessage(MessageType.misunderstood));
@@ -67,6 +67,6 @@ class Game {
   }
 
   void startGame() {
-    _message.printMessage(MessageType.intro,systemName: _planets.systemName);
+    _message.printMessage(MessageType.intro, systemName: _planets.systemName, numPlanets: _planets.numPlanetsStr);
   }
 }

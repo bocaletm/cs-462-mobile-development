@@ -7,12 +7,16 @@ import 'dart:math';
 class Planets {
   final String planetsUri;
   String systemName;
-  static const int _numPlanets = 9;
+  static const int numPlanets = 9;
   static const int timesToTry = 10;
   bool complete;
   final Map<String,String> _planetList;
 
   Planets(this.planetsUri) : complete = false, _planetList = new Map(), systemName = 'Galaxy Far, Far Away';
+
+  String get numPlanetsStr {
+    return numPlanets.toString();
+  }
 
   List getRandom() {
     var nameDescription = List(2);
@@ -24,7 +28,7 @@ class Planets {
 
   List getUserSelection(String planetName) {
     var nameDescription = List(2);
-    var description = 'A mysterious planet.';
+    var description = 'Nothing is known about this planet';
     if (_planetList.containsKey(planetName)) {
       description = _planetList[planetName];
     } 
@@ -70,7 +74,7 @@ class Planets {
     var response;
     complete = true;
     String url;
-    for (var i = 1; i <= _numPlanets; i++) {
+    for (var i = 1; i <= numPlanets; i++) {
       url = '$planetsUri$i';
       response = null;
       try{
