@@ -95,7 +95,7 @@ class Planets {
     } else {
       size = 'giant,';
     }
-    _planetList[name.toString()] = 'A $size distant, $climate planet composed of $terrain';
+    _planetList[name.toString()] = 'A $size distant, $climate planet composed of $terrain terrain';
   }
 
   void populateFromAPI() async{
