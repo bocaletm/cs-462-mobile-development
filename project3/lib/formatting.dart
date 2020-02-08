@@ -7,7 +7,7 @@ Widget paragraphText(String text) {
   return Text(
           text,
           style: TextStyle(
-            height: 2,
+            height: 1.5,
             fontSize: 15,
             fontWeight: FontWeight.normal,
           ),
@@ -52,5 +52,13 @@ Widget tabbedAppbar({String title, List<Widget> widgetList}) {
     bottom: TabBar(
       tabs: widgetList
     ),
+  );
+}
+
+Widget formattedDivider() {
+  return Divider(
+    color: Colors.grey,
+    height: 20,
+    thickness: 2
   );
 }

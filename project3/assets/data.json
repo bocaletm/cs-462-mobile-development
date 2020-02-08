@@ -1,0 +1,79 @@
+{   
+    "businessCard" :
+    {
+        "name": "Mario Bocaletti",
+        "title": "Sr. Infrastructure Architect",
+        "phoneNumber": "504-756-1818",
+        "websiteUrl": "https://github.com/bocaletm",
+        "email": "bocalettirocco@gmail.com",
+        "imgUrl": "https://pbs.twimg.com/profile_images/470754689877688320/LQKP7DQZ.jpeg"
+    },
+    "resume" :
+    {
+        "name": "Mario Bocaletti",
+        "phoneNumber": "504-756-1818",
+        "email": "bocalettirocco@gmail.com",
+        "education": [ 
+            { 
+                "education" : [
+                    { 
+                        "degree": "B.S. - Computer Science" 
+                    }, 
+                    { 
+                        "university": "Oregon State University" 
+                    } 
+                ]
+            }
+        ],
+        "experience": [ 
+            { 
+                "1" : [
+                    {
+                        "title": "Sr. Infrastructure Architect"
+                    },
+                    { 
+                        "employer": "Baker Hughes" 
+                    }, 
+                    { 
+                        "description": "Provides build, deployment, and versioning support to pre-production environments" 
+                    },
+                    {
+                        "dates": "01/2019 to Present"
+                    }
+                ]
+            },
+            {
+                "2" : [
+                    {
+                        "title": "Sr. Technical Writer"
+                    },
+                    { 
+                        "employer": "Baker Hughes" 
+                    }, 
+                    { 
+                        "description": "Wrote SOPs and documented build and release processes" 
+                    },
+                    {
+                        "dates": "03/2018 to 12/2018"
+                    }
+                ]
+            },
+            {
+                "3" : [
+                    {
+                        "title": "Medical Editor"
+                    },
+                    { 
+                        "employer": "Ochsner Clinic Foundation" 
+                    }, 
+                    { 
+                        "description": "Edited case reports, literature reviews, and original research articles for an academic medical journal" 
+                    },
+                    {
+                        "dates": "01/2019 to Present"
+                    }
+                ]
+            }
+        ]
+    }
+}

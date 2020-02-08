@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:project3/business_card.dart';
 import 'package:project3/question.dart';
@@ -32,14 +33,15 @@ class AppState extends State<App> {
           Icon(Icons.help_outline),
         ]),
         body: FutureBuilder (
-          future: DefaultAssetBundle.of(context).loadString('assets/businessCard.json'),
+          future: DefaultAssetBundle.of(context).loadString('assets/data.json'),
           builder: (context, snapshot) {
             if(!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             }
-            print('Read json data: \n ${snapshot.data}');
-            var businessCard = BusinessCard(snapshot.data);
-            var resume = Resume();
+            var json = jsonDecode(snapshot.data);
+            print('Read json data: \n ${json['businessCard']}');
+            var businessCard = BusinessCard(json['businessCard']);
+            var resume = Resume(json['resume']);
             var question = Question();
             return format.tabViews(businessCard, resume, question);
           }

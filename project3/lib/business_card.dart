@@ -1,34 +1,31 @@
 import 'dart:io';
-import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
 import 'formatting.dart' as format;
 import 'messaging.dart';
 
 class BusinessCard {
 
-  final String json;
-  MessagingService msg;
-  String name;
-  String title;
-  String phoneNumber;
-  String websiteUrl;
-  String email;
-  String imgUrl;
+  final Map<String,dynamic> _json;
+  MessagingService _msg;
+  String _name;
+  String _title;
+  String _phoneNumber;
+  String _websiteUrl;
+  String _email;
+  String _imgUrl;
   bool complete = false;
 
-  BusinessCard(this.json) {
-    var jsonParsed;
+  BusinessCard(this._json) {
     try {
-      this.msg = MessagingService();
-      jsonParsed = convert.jsonDecode(this.json);
-      this.name = jsonParsed['name'];
-      this.title = jsonParsed['title'];
-      this.phoneNumber = jsonParsed['phoneNumber'];
-      this.websiteUrl = jsonParsed['websiteUrl'];
-      this.email = jsonParsed['email'];
-      this.imgUrl = jsonParsed['imgUrl'];
+      _msg = MessagingService();
+      _name = _json['name'];
+      _title = _json['title'];
+      _phoneNumber = _json['phoneNumber'];
+      _websiteUrl = _json['websiteUrl'];
+      _email = _json['email'];
+      _imgUrl = _json['imgUrl'];
     } catch(e) {
-      stderr.write('ERROR: Could not parse json:\n\n$json\n\n');
+      stderr.write('ERROR: Could not parse json:\n\n$_json\n\n');
     }
     complete = true;
   }
@@ -37,7 +34,7 @@ class BusinessCard {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Image.network(
-        this.imgUrl,
+        this._imgUrl,
         fit: BoxFit.fill,
         loadingBuilder: (context, child, progress) {
           return progress == null
@@ -58,11 +55,11 @@ class BusinessCard {
           child: formattedPhoto(),
           height: 75, width: 75
         ),
-        format.headerText(this.name),
-        format.paragraphText(this.title),
+        format.headerText(this._name),
+        format.paragraphText(this._title),
         InkWell(
-          child: format.paragraphText(this.phoneNumber),
-          onTap: () { msg.sendSms(phoneNumber); },
+          child: format.paragraphText(this._phoneNumber),
+          onTap: () { _msg.sendSms(_phoneNumber); },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -71,16 +68,16 @@ class BusinessCard {
             InkWell(
               onTap: () async { 
                 try { 
-                  await msg.launchURL(websiteUrl);
+                  await _msg.launchURL(_websiteUrl);
                 } catch(e) {
                   print(e);
                 }
               },
-              child: format.footerText(this.websiteUrl)
+              child: format.footerText(this._websiteUrl)
             )
           ]),
           Column(children: [
-            format.footerText(this.email)
+            format.footerText(this._email)
           ])
         ]),
       ],
