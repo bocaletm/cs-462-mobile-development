@@ -117,23 +117,6 @@ Widget printExperience() {
     ];
   }
 
-  Widget display() {
-    return LayoutBuilder(
-    builder: (BuildContext context, BoxConstraints viewportConstraints) {
-      return SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: viewportConstraints.maxHeight,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: layoutList()
-          ),
-        ),
-      );
-    },
-  );
-  }
+  Widget display() => format.paginate(layoutList());
+
 }

@@ -45,42 +45,49 @@ class BusinessCard {
     );
   }
 
-  Widget display() {
-    return Column(
-      children: <Widget>[
-        SizedBox(
-          height: 50.0,
-        ),
-        SizedBox(
+  Widget display() => format.paginate(layoutList());
+
+  List<Widget> layoutList() {
+    return [
+      Center(child: format.stackFiller()),
+      SizedBox(
+        height: 50.0,
+      ),
+      Center(
+        child: SizedBox(
           child: formattedPhoto(),
           height: 75, width: 75
         ),
-        format.headerText(this._name),
-        format.paragraphText(this._title),
-        InkWell(
+      ),
+      Center(child: format.headerText(this._name)),
+      Center(child: format.paragraphText(this._title)),
+      Center(
+        child: InkWell(
           child: format.paragraphText(this._phoneNumber),
           onTap: () { _msg.sendSms(_phoneNumber); },
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-          Column(children: [
-            InkWell(
-              onTap: () async { 
-                try { 
-                  await _msg.launchURL(_websiteUrl);
-                } catch(e) {
-                  print(e);
-                }
-              },
-              child: format.footerText(this._websiteUrl)
-            )
-          ]),
-          Column(children: [
-            format.footerText(this._email)
-          ])
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+        Column(children: [
+          InkWell(
+            onTap: () async { 
+              try { 
+                await _msg.launchURL(_websiteUrl);
+              } catch(e) {
+                print(e);
+              }
+            },
+            child: format.footerText(this._websiteUrl)
+          )
         ]),
-      ],
-    );
+        Column(children: [
+          format.footerText(this._email)
+        ]),
+      ]),
+      Divider(),
+      Center(child: format.stackFiller()),
+    ];
   }
 }
