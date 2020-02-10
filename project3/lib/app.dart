@@ -39,7 +39,7 @@ class AppState extends State<App> {
               return Center(child: CircularProgressIndicator());
             }
             var json = jsonDecode(snapshot.data);
-            print('Read json data: \n ${json['businessCard']}');
+            print('Read json data: \n\n ${json}');
             var businessCard = BusinessCard(json['businessCard']);
             var resume = Resume(json['resume']);
             var question = Question();

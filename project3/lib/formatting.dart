@@ -18,9 +18,19 @@ Widget headerText(String text) {
   return Text(
           text,
           style: TextStyle(
-            height: 3,
+            height: 2,
             fontSize: 20,
             fontWeight: FontWeight.bold,
+          ),
+        );
+}
+
+Widget subHeadText(String text) {
+  return Text(
+          text,
+          style: TextStyle(
+            height: 1,
+            fontSize: 20,
           ),
         );
 }
@@ -58,7 +68,7 @@ Widget tabbedAppbar({String title, List<Widget> widgetList}) {
 Widget formattedDivider() {
   return Divider(
     color: Colors.grey,
-    height: 20,
+    height: 10,
     thickness: 2
   );
 }

@@ -1,23 +1,134 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'formatting.dart' as format;
 
 class Resume {
 
   final Map<String,dynamic> _json;
+  int _experienceCount;
+  int _educationCount;
 
-  Resume(this._json);
+  Resume(this._json) {
+    _educationCount = _json['education'].length;
+    _experienceCount = _json['experience'].length;
+  }
 
-  Widget display() {
-        return Column(
-      children: <Widget>[
-        SizedBox(
-          height: 5.0,
-        ),
+  Widget printHeader() {
+    return Center(
+      child: Column (children: [
         format.headerText(_json['name']),
         format.paragraphText(_json['phoneNumber']),
         format.paragraphText(_json['email']),
-        format.formattedDivider()
-      ],
+      ]),
     );
+  }
+
+Widget printExperience() {
+    var experience = _json['experience'];
+    var idx = 1;
+    List<Widget> columnList= [];
+    experience.forEach((exp) {
+      print('Processing experience');
+      print(exp);
+      var entry = exp['${idx.toString()}'];
+      print(entry);
+      String title = entry[0]['title'];
+      String employer = entry[1]['employer'];
+      String desc = entry[2]['description'];
+      String dates = entry[3]['dates'];
+
+      columnList.add(format.headerText(title));
+      columnList.add(format.subHeadText(employer));
+      columnList.add(format.paragraphText(dates));
+      columnList.add(format.paragraphText(desc));
+      idx++;
+    });
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      child: Align(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: columnList,
+        ),
+        alignment: Alignment.topLeft,
+      ),
+    );
+  }
+
+  Widget printEducation() {
+    var education = _json['education'];
+    var idx = 1;
+    List<Widget> columnList= [];
+    education.forEach((edu) {
+      print('Processing education');
+      print(edu);
+      var entry = edu['${idx.toString()}'];
+      print(entry);
+      String degree = entry[0]['degree'];
+      String uni = entry[1]['university'];
+      String year = entry[2]['year'];
+      columnList.add(format.headerText(degree));
+      columnList.add(format.subHeadText(uni));
+      columnList.add(format.paragraphText(year));
+      idx++;
+    });
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+      child: Align(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: columnList,
+        ),
+        alignment: Alignment.topLeft,
+      ),
+    );
+  }
+
+  Widget display() {
+    return LayoutBuilder(
+    builder: (BuildContext context, BoxConstraints viewportConstraints) {
+      return SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: viewportConstraints.maxHeight,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                child: printHeader(),
+                color: Colors.white,
+                height: 110.0,
+              ),
+              format.formattedDivider(),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: format.headerText('EDUCATION')
+              ),
+              Container(
+                child: printEducation(),
+                color: Colors.white,
+                height: 85.0 * _educationCount,
+              ),
+              format.formattedDivider(),
+              Padding(
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                child: format.headerText('EXPERIENCE')
+              ),
+              Container(
+                child: printExperience(),
+                color: Colors.white, 
+                height: 150.0 * _experienceCount,
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
   }
 }

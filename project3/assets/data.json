@@ -15,12 +15,41 @@
         "email": "bocalettirocco@gmail.com",
         "education": [ 
             { 
-                "education" : [
+                "1" : [
                     { 
                         "degree": "B.S. - Computer Science" 
                     }, 
                     { 
                         "university": "Oregon State University" 
+                    }, 
+                    { 
+                        "year": "2020" 
+                    } 
+                ]
+            },
+            { 
+                "2" : [
+                    { 
+                        "degree": "M.A. - Classics (Latin)" 
+                    }, 
+                    { 
+                        "university": "Florida State University" 
+                    }, 
+                    { 
+                        "year": "2012" 
+                    } 
+                ]
+            },
+            { 
+                "3" : [
+                    { 
+                        "degree": "B.A. - English" 
+                    }, 
+                    { 
+                        "university": "Loyola University New Orleans" 
+                    }, 
+                    { 
+                        "year": "2010" 
                     } 
                 ]
             }
