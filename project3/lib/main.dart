@@ -8,6 +8,7 @@ void main() {
     home: App(title),
     theme: ThemeData(
       primarySwatch: Colors.grey,
+      fontFamily: 'Consolas',
     ),
   ));
 }

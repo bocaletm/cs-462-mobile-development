@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'formatting.dart' as format;
 
@@ -86,6 +85,38 @@ Widget printExperience() {
     );
   }
 
+  List <Widget> layoutList() {
+    return [
+      Container(
+        child: printHeader(),
+        color: Colors.black87,
+        height: 110.0,
+      ),
+      format.formattedDivider(),
+      Container(
+        child: format.paddedHeaderRow('EDUCATION'),
+        color: Colors.black87,
+        height: 50,
+      ),
+      Container(
+        child: printEducation(),
+        color: Colors.black87,
+        height: 88.0 * _educationCount,
+      ),
+      format.formattedDivider(),
+      Container(
+        child: format.paddedHeaderRow('EXPERIENCE'),
+        color: Colors.black87,
+        height: 50,
+      ),
+      Container(
+        child: printExperience(),
+        color: Colors.black87, 
+        height: 150.0 * _experienceCount,
+      ),
+    ];
+  }
+
   Widget display() {
     return LayoutBuilder(
     builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -98,33 +129,7 @@ Widget printExperience() {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: printHeader(),
-                color: Colors.white,
-                height: 110.0,
-              ),
-              format.formattedDivider(),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: format.headerText('EDUCATION')
-              ),
-              Container(
-                child: printEducation(),
-                color: Colors.white,
-                height: 85.0 * _educationCount,
-              ),
-              format.formattedDivider(),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: format.headerText('EXPERIENCE')
-              ),
-              Container(
-                child: printExperience(),
-                color: Colors.white, 
-                height: 150.0 * _experienceCount,
-              ),
-            ],
+            children: layoutList()
           ),
         ),
       );

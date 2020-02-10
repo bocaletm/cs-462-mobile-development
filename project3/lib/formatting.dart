@@ -5,13 +5,14 @@ import 'package:project3/question.dart';
 
 Widget paragraphText(String text) {
   return Text(
-          text,
-          style: TextStyle(
-            height: 1.5,
-            fontSize: 15,
-            fontWeight: FontWeight.normal,
-          ),
-      );
+      text,
+      style: TextStyle(
+        height: 1.5,
+        fontSize: 15,
+        fontWeight: FontWeight.normal,
+        color: Colors.green
+      ),
+  );
 }
 
 Widget headerText(String text) {
@@ -21,6 +22,7 @@ Widget headerText(String text) {
             height: 2,
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            color: Colors.green
           ),
         );
 }
@@ -31,7 +33,8 @@ Widget subHeadText(String text) {
           style: TextStyle(
             height: 1,
             fontSize: 20,
-          ),
+            color: Colors.green
+          ), 
         );
 }
 
@@ -42,6 +45,7 @@ Widget footerText(String text) {
             height: 2,
             fontSize: 12,
             fontWeight: FontWeight.bold,
+            color: Colors.green
           ),
         );
 }
@@ -68,7 +72,18 @@ Widget tabbedAppbar({String title, List<Widget> widgetList}) {
 Widget formattedDivider() {
   return Divider(
     color: Colors.grey,
-    height: 10,
+    height: 0,
     thickness: 2
+  );
+}
+
+Widget paddedHeaderRow(String text) {
+  return Row(
+    children: [
+      Padding(
+        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: headerText(text)
+      )
+    ]
   );
 }
