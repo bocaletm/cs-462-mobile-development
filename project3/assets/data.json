@@ -104,5 +104,15 @@
                 ]
             }
         ]
+    },
+    "answers" :
+    {
+        "1": "Yes.",
+        "2": "No.",
+        "3": "Maybe.",
+        "4": "Can you repeat the question?",
+        "5": "You're not the boss of me, now!",
+        "6": "What's the frequency, Kenneth?",
+        "7": "Sometimes you eat the bear, and sometimes the bear, well, eats you."
     }
 }

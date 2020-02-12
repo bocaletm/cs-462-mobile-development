@@ -34,7 +34,7 @@ class BusinessCard {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Image.network(
-        this._imgUrl,
+        _imgUrl,
         fit: BoxFit.fill,
         loadingBuilder: (context, child, progress) {
           return progress == null
@@ -45,48 +45,60 @@ class BusinessCard {
     );
   }
 
+  Widget cardWithPicture() {
+    return Container(
+      color: Colors.black87,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 40.0,
+          ),
+          Center(
+            child: SizedBox(
+              child: formattedPhoto(),
+              height: 75, width: 75
+            ),
+          ),
+          Center(child: format.headerText(_name)),
+          Center(child: format.paragraphText(_title)),
+          Center(
+            child: InkWell(
+              child: format.paragraphText(_phoneNumber),
+              onTap: () { _msg.sendSms(_phoneNumber); },
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+            Column(children: [
+              InkWell(
+                onTap: () async { 
+                  try { 
+                    await _msg.launchURL(_websiteUrl);
+                  } catch(e) {
+                    print(e);
+                  }
+                },
+                child: format.footerText(_websiteUrl)
+              )
+            ]),
+            Column(children: [
+              format.footerText(_email)
+            ]),
+          ]),
+          SizedBox(
+            height: 30.0,
+          ),        ]
+      )
+    );
+  }
+
   Widget display() => format.paginate(layoutList());
 
   List<Widget> layoutList() {
     return [
       Center(child: format.stackFiller()),
-      SizedBox(
-        height: 50.0,
-      ),
-      Center(
-        child: SizedBox(
-          child: formattedPhoto(),
-          height: 75, width: 75
-        ),
-      ),
-      Center(child: format.headerText(this._name)),
-      Center(child: format.paragraphText(this._title)),
-      Center(
-        child: InkWell(
-          child: format.paragraphText(this._phoneNumber),
-          onTap: () { _msg.sendSms(_phoneNumber); },
-        ),
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-        Column(children: [
-          InkWell(
-            onTap: () async { 
-              try { 
-                await _msg.launchURL(_websiteUrl);
-              } catch(e) {
-                print(e);
-              }
-            },
-            child: format.footerText(this._websiteUrl)
-          )
-        ]),
-        Column(children: [
-          format.footerText(this._email)
-        ]),
-      ]),
-      Divider(),
+      cardWithPicture(),
       Center(child: format.stackFiller()),
     ];
   }

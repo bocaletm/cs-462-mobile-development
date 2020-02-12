@@ -42,7 +42,7 @@ class AppState extends State<App> {
             print('Read json data: \n\n ${json}');
             var businessCard = BusinessCard(json['businessCard']);
             var resume = Resume(json['resume']);
-            var question = Question();
+            var question = Question(json['answers']);
             return format.tabViews(businessCard, resume, question);
           }
         ),

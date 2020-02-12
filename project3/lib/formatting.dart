@@ -109,113 +109,58 @@ Widget paginate(List<Widget> displayList) {
   );
 }
 
-Widget stackFiller() {
-  return Stack(
-    children: <Widget>[
-      Container(
-        width: 400,
+List<Widget> generateBanner(double width, int topRow, int bottomRow) {
+  var widgetList = [
+    Container(
+        width: width,
         height: 180,
         color: Colors.teal,
       ),
       Positioned(
         top: 20,
         child: Container(
-          width: 400,
+          width: width,
           height: 135,
           color: Colors.yellow[100],
         ),
       ),
-      Positioned(
-        bottom: 80,
-        right: 30,
+  ];
+  var spaceFromRight = 0.0;
+  for (int i = 0; i <= topRow; i++) {
+    widgetList.add(Positioned(
+        top: 40,
+        right: spaceFromRight,
         child: Container(
           child: CustomPaint(
             size: Size(50, 50),
             painter: DrawTriangle(Colors.red[200])
           ),
         ),
-      ),
-      Positioned(
-        bottom: 80,
-        right: 105,
+      )
+    );
+    spaceFromRight += 60;
+  }
+  
+  spaceFromRight = 30.0;
+  for (int i = 0; i <= bottomRow; i++) {
+    widgetList.add(Positioned(
+        bottom: 40,
+        right: spaceFromRight,
         child: Container(
           child: CustomPaint(
             size: Size(50, 50),
             painter: DrawTriangle(Colors.red[200])
           ),
         ),
-      ),
-      Positioned(
-        bottom: 80,
-        right: 180,
-        child: Container(
-          child: CustomPaint(
-            size: Size(50, 50),
-            painter: DrawTriangle(Colors.red[200])
-          ),
-        ),
-      ),
-      Positioned(
-        bottom: 80,
-        right: 255,
-        child: Container(
-          child: CustomPaint(
-            size: Size(50, 50),
-            painter: DrawTriangle(Colors.red[200])
-          ),
-        ),
-      ),
-      Positioned(
-        bottom: 80,
-        right: 330,
-        child: Container(
-          child: CustomPaint(
-            size: Size(50, 50),
-            painter: DrawTriangle(Colors.red[200])
-          ),
-        ),
-      ),
-//bottom row
-      Positioned(
-        bottom: 50,
-        right: 69,
-        child: Container(
-          child: CustomPaint(
-            size: Size(50, 50),
-            painter: DrawTriangle(Colors.red[200])
-          ),
-        ),
-      ),
-      Positioned(
-        bottom: 50,
-        right: 144,
-        child: Container(
-          child: CustomPaint(
-            size: Size(50, 50),
-            painter: DrawTriangle(Colors.red[200])
-          ),
-        ),
-      ),
-      Positioned(
-        bottom: 50,
-        right: 218,
-        child: Container(
-          child: CustomPaint(
-            size: Size(50, 50),
-            painter: DrawTriangle(Colors.red[200])
-          ),
-        ),
-      ),
-      Positioned(
-        bottom: 50,
-        right: 293,
-        child: Container(
-          child: CustomPaint(
-            size: Size(50, 50),
-            painter: DrawTriangle(Colors.red[200])
-          ),
-        ),
-      ),
-    ],
+      )
+    );
+   spaceFromRight += 60;
+  }
+  return widgetList;
+}
+
+Widget stackFiller() {
+  return Stack(
+    children: generateBanner(1000, 16, 15),
   );
 }
