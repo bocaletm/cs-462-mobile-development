@@ -56,7 +56,7 @@ Widget tabViews(BuildContext context, BusinessCard businessCard, Resume resume, 
     children: <Widget> [
       businessCard?.display(context),
       resume?.display(),
-      question?.display(),
+      question,
     ],
   );
 }
