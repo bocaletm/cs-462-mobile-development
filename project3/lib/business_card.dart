@@ -93,13 +93,13 @@ class BusinessCard {
     );
   }
 
-  Widget display() => format.paginate(layoutList());
+  Widget display(BuildContext context) => format.paginate(layoutList(context));
 
-  List<Widget> layoutList() {
+  List<Widget> layoutList(BuildContext context) {
     return [
-      Center(child: format.stackFiller()),
+      Center(child: format.stackFiller(context)),
       cardWithPicture(),
-      Center(child: format.stackFiller()),
+      Center(child: format.stackFiller(context)),
     ];
   }
 }

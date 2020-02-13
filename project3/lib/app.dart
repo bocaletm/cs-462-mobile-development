@@ -43,7 +43,7 @@ class AppState extends State<App> {
             var businessCard = BusinessCard(json['businessCard']);
             var resume = Resume(json['resume']);
             var question = Question(json['answers']);
-            return format.tabViews(businessCard, resume, question);
+            return format.tabViews(context, businessCard, resume, question);
           }
         ),
       ),

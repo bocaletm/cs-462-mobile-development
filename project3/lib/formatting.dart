@@ -51,10 +51,10 @@ Widget footerText(String text) {
         );
 }
 
-Widget tabViews(BusinessCard businessCard, Resume resume, Question question) {
+Widget tabViews(BuildContext context, BusinessCard businessCard, Resume resume, Question question) {
   return TabBarView(
     children: <Widget> [
-      businessCard?.display(),
+      businessCard?.display(context),
       resume?.display(),
       question?.display(),
     ],
@@ -159,8 +159,8 @@ List<Widget> generateBanner(double width, int topRow, int bottomRow) {
   return widgetList;
 }
 
-Widget stackFiller() {
+Widget stackFiller(BuildContext context) {
   return Stack(
-    children: generateBanner(1000, 16, 15),
+    children: generateBanner(MediaQuery.of(context).size.width, 16, 15),
   );
 }
