@@ -161,6 +161,6 @@ List<Widget> generateBanner(double width, int topRow, int bottomRow) {
 
 Widget stackFiller(BuildContext context) {
   return Stack(
-    children: generateBanner(MediaQuery.of(context).size.width, 16, 15),
+    children: generateBanner((MediaQuery.of(context).size.width - 1), 16, 16),
   );
 }

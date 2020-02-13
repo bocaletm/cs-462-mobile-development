@@ -11,6 +11,7 @@ void main() {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
+  
   runApp(MaterialApp(
     title: title,
     home: App(title),
