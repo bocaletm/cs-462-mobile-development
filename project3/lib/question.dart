@@ -5,18 +5,20 @@ import 'formatting.dart' as format;
 
 
 class Question {
+
   final Map<String,dynamic> _json;
-  final int _min = 1;
+  static const int _min = 1;
+  Random _randomizer;
   int _max;
 
   Question(this._json) {
     _max = _json.length;
+    var epoch = DateTime.now().millisecondsSinceEpoch;
+    _randomizer = Random(epoch);
   }
 
   String randomNumString() {
-    var epoch = DateTime.now().millisecondsSinceEpoch;
-    Random randomizer = Random(epoch);
-    return randomizer.nextInt(_max).toString();
+    return _randomizer.nextInt(_max).toString();
   }
 
   Widget display() {
