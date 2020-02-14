@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'formatting.dart' as format;
-import 'messaging.dart';
+import '../messaging.dart';
 
-class BusinessCard {
+class BusinessCardView {
 
   final Map<String,dynamic> _json;
   MessagingService _msg;
@@ -15,7 +15,7 @@ class BusinessCard {
   String _imgUrl;
   bool complete = false;
 
-  BusinessCard(this._json) {
+  BusinessCardView(this._json) {
     try {
       _msg = MessagingService();
       _name = _json['name'];

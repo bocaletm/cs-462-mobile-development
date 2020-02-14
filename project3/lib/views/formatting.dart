@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project3/business_card.dart';
-import 'package:project3/resume.dart';
-import 'package:project3/question.dart';
+import 'package:project3/views/business_card_view.dart';
+import 'package:project3/views/resume_view.dart';
+import 'package:project3/views/question_view.dart';
 import 'package:project3/draw_triangle.dart';
 
 Widget paragraphText(String text) {
@@ -51,12 +51,12 @@ Widget footerText(String text) {
         );
 }
 
-Widget tabViews(BuildContext context, BusinessCard businessCard, Resume resume, Question question) {
+Widget tabViews(BuildContext context, BusinessCardView businessCardView, ResumeView resumeView, QuestionView questionView) {
   return TabBarView(
     children: <Widget> [
-      businessCard?.display(context),
-      resume?.display(),
-      question,
+      businessCardView?.display(context),
+      resumeView?.display(),
+      questionView,
     ],
   );
 }

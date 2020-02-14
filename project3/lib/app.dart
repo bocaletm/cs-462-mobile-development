@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:project3/business_card.dart';
-import 'package:project3/question.dart';
-import 'package:project3/resume.dart';
-import 'formatting.dart' as format;
+import 'package:project3/views/business_card_view.dart';
+import 'package:project3/views/question_view.dart';
+import 'package:project3/views/resume_view.dart';
+import 'views/formatting.dart' as format;
 
 class App extends StatefulWidget {
 
@@ -40,10 +40,10 @@ class AppState extends State<App> {
             }
             var json = jsonDecode(snapshot.data);
             print('Read json data: \n\n ${json}');
-            var businessCard = BusinessCard(json['businessCard']);
-            var resume = Resume(json['resume']);
-            var question = Question(json['answers']);
-            return format.tabViews(context, businessCard, resume, question);
+            var businessCardView = BusinessCardView(json['businessCard']);
+            var resumeView = ResumeView(json['resume']);
+            var questionView = QuestionView(json['answers']);
+            return format.tabViews(context, businessCardView, resumeView, questionView);
           }
         ),
       ),

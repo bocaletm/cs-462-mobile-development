@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'formatting.dart' as format;
 
-class Resume {
+class ResumeView {
 
   final Map<String,dynamic> _json;
   int _experienceCount;
   int _educationCount;
 
-  Resume(this._json) {
+  ResumeView(this._json) {
     _educationCount = _json['education'].length;
     _experienceCount = _json['experience'].length;
   }
 
-  Widget printHeader() {
+  Widget _printHeader() {
     return Center(
       child: Column (children: [
         format.headerText(_json['name']),
@@ -22,7 +22,7 @@ class Resume {
     );
   }
 
-Widget printExperience() {
+Widget _printExperience() {
     var experience = _json['experience'];
     var idx = 1;
     List<Widget> columnList= [];
@@ -42,6 +42,7 @@ Widget printExperience() {
       columnList.add(format.paragraphText(desc));
       idx++;
     });
+
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
       child: Align(
@@ -55,7 +56,7 @@ Widget printExperience() {
     );
   }
 
-  Widget printEducation() {
+  Widget _printEducation() {
     var education = _json['education'];
     var idx = 1;
     List<Widget> columnList= [];
@@ -72,6 +73,7 @@ Widget printExperience() {
       columnList.add(format.paragraphText(year));
       idx++;
     });
+
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
       child: Align(
@@ -85,10 +87,10 @@ Widget printExperience() {
     );
   }
 
-  List <Widget> layoutList() {
+  List <Widget> _layoutList() {
     return [
       Container(
-        child: printHeader(),
+        child: _printHeader(),
         color: Colors.black87,
         height: 110.0,
       ),
@@ -99,7 +101,7 @@ Widget printExperience() {
         height: 50,
       ),
       Container(
-        child: printEducation(),
+        child: _printEducation(),
         color: Colors.black87,
         height: 88.0 * _educationCount,
       ),
@@ -110,13 +112,13 @@ Widget printExperience() {
         height: 50,
       ),
       Container(
-        child: printExperience(),
+        child: _printExperience(),
         color: Colors.black87, 
         height: 150.0 * _experienceCount,
       ),
     ];
   }
 
-  Widget display() => format.paginate(layoutList());
+  Widget display() => format.paginate(_layoutList());
 
 }

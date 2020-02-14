@@ -1,14 +1,14 @@
 import 'dart:core';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'formatting.dart' as format;
+import 'package:project3/models/question.dart';
 
 
-class Question extends StatefulWidget {
+class QuestionView extends StatefulWidget {
 
   final Map<String,dynamic> _json;
 
-  Question(this._json, {Key key}) : super(key: key);
+  QuestionView(this._json, {Key key}) : super(key: key);
 
   @override
   _QuestionState createState() => new _QuestionState(_json);
@@ -17,29 +17,18 @@ class Question extends StatefulWidget {
 
 class _QuestionState extends State {
 
-  _QuestionState(this._json) {
-    _max = _json.length + 1;
-    _randomizer = Random(DateTime.now().millisecondsSinceEpoch);
-  }
-
   final Map<String,dynamic> _json;
-  Random _randomizer;
-  static const int _min = 1;
-  int _max;
-  String _message = 'Tap here for your prediction!';
+  Question question;
 
-  String randomNumString() {
-    return (_min + _randomizer.nextInt(_max - _min)).toString();
+  _QuestionState(this._json) {
+    question = Question(_json);
   }
+
 
   List<Widget> layoutList(BuildContext context) {
     return [
-      format.paragraphText(_message),
+      format.paragraphText(question.message),
     ];
-  }
-
-  void _rotateText() {
-    _message = _json[randomNumString()];
   }
 
   Widget display(BuildContext context) => format.paginate(layoutList(context));
@@ -49,7 +38,7 @@ class _QuestionState extends State {
     return GestureDetector(
       onTap: () {
         setState(() {
-            _rotateText();
+            question.rotateText();
         });
       },
       child: display(context),
