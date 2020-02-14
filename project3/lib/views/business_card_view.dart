@@ -1,40 +1,21 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:project3/models/business_card.dart';
 import 'formatting.dart' as format;
-import '../messaging.dart';
 
 class BusinessCardView {
 
   final Map<String,dynamic> _json;
-  MessagingService _msg;
-  String _name;
-  String _title;
-  String _phoneNumber;
-  String _websiteUrl;
-  String _email;
-  String _imgUrl;
-  bool complete = false;
+  BusinessCard _card;
 
   BusinessCardView(this._json) {
-    try {
-      _msg = MessagingService();
-      _name = _json['name'];
-      _title = _json['title'];
-      _phoneNumber = _json['phoneNumber'];
-      _websiteUrl = _json['websiteUrl'];
-      _email = _json['email'];
-      _imgUrl = _json['imgUrl'];
-    } catch(e) {
-      stderr.write('ERROR: Could not parse json:\n\n$_json\n\n');
-    }
-    complete = true;
+    _card = BusinessCard(_json);
   }
   
   Widget formattedPhoto() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Image.network(
-        _imgUrl,
+        _card.imgUrl,
         fit: BoxFit.fill,
         loadingBuilder: (context, child, progress) {
           return progress == null
@@ -59,12 +40,12 @@ class BusinessCardView {
               height: 75, width: 75
             ),
           ),
-          Center(child: format.headerText(_name)),
-          Center(child: format.paragraphText(_title)),
+          Center(child: format.headerText(_card.name)),
+          Center(child: format.paragraphText(_card.title)),
           Center(
             child: InkWell(
-              child: format.paragraphText(_phoneNumber),
-              onTap: () { _msg.sendSms(_phoneNumber); },
+              child: format.paragraphText(_card.phoneNumber),
+              onTap: () { _card.msg.sendSms(_card.phoneNumber); },
             ),
           ),
           Row(
@@ -74,16 +55,16 @@ class BusinessCardView {
               InkWell(
                 onTap: () async { 
                   try { 
-                    await _msg.launchURL(_websiteUrl);
+                    await _card.msg.launchURL(_card.websiteUrl);
                   } catch(e) {
                     print(e);
                   }
                 },
-                child: format.footerText(_websiteUrl)
+                child: format.footerText(_card.websiteUrl)
               )
             ]),
             Column(children: [
-              format.footerText(_email)
+              format.footerText(_card.email)
             ]),
           ]),
           SizedBox(
