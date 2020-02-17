@@ -20,10 +20,10 @@
                         "degree": "B.S. - Computer Science" 
                     }, 
                     { 
-                        "university": "Oregon State University" 
+                        "institution": "Oregon State University" 
                     }, 
                     { 
-                        "year": "2020" 
+                        "dates": "2020" 
                     } 
                 ]
             },
@@ -33,10 +33,10 @@
                         "degree": "M.A. - Classics (Latin)" 
                     }, 
                     { 
-                        "university": "Florida State University" 
+                        "institution": "Florida State University" 
                     }, 
                     { 
-                        "year": "2012" 
+                        "dates": "2012" 
                     } 
                 ]
             },
@@ -46,10 +46,10 @@
                         "degree": "B.A. - English" 
                     }, 
                     { 
-                        "university": "Loyola University New Orleans" 
+                        "institution": "Loyola University New Orleans" 
                     }, 
                     { 
-                        "year": "2010" 
+                        "dates": "2010" 
                     } 
                 ]
             }
@@ -111,9 +111,9 @@
         "2": "No.",
         "3": "Maybe.",
         "4": "Can you repeat the question?",
-        "5": "You're not the boss of me, now!",
+        "5": "Never!",
         "6": "What's the frequency, Kenneth?",
-        "7": "Sometimes you eat the bear, and sometimes the bear, well, eats you.",
+        "7": "Of course!",
         "8": "Life, uh, finds a way..."
     }
 }

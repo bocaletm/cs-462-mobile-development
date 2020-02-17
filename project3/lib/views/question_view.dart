@@ -17,6 +17,8 @@ class QuestionView extends StatefulWidget {
 
 class _QuestionState extends State {
 
+  static const String _header = 'Call me... Maybe?';
+  static const String _instruction = 'Ask a question. Tap for the answer';
   final Map<String,dynamic> _json;
   Question question;
 
@@ -27,7 +29,23 @@ class _QuestionState extends State {
 
   List<Widget> layoutList(BuildContext context) {
     return [
-      format.paragraphText(question.message),
+      Center(child: format.stackFiller(context)),
+      Container(
+        color: Colors.black87,
+        width: MediaQuery.of(context).size.width,
+        child: Column(     
+          children: [
+            SizedBox(height: 75.0),
+            format.headerText(_header),
+            format.footerText(_instruction),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: format.headerText(question.message),
+            ),
+            SizedBox(height: 75.0),
+          ]),
+      ),
+      Center(child: format.stackFiller(context)),
     ];
   }
 

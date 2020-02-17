@@ -6,7 +6,7 @@ class Question {
   final Map<String,dynamic> _json;
   Random _randomizer;
   int _max;
-  String _message = 'Tap here for your prediction!';
+  String _message = '';
 
   Question(this._json) {
     _max = _json.length + 1;

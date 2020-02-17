@@ -69,7 +69,7 @@ class BusinessCardView {
           ]),
           SizedBox(
             height: 30.0,
-          ),        ]
+          ),]
       )
     );
   }

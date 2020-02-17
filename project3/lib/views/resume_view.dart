@@ -1,47 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:project3/models/resume.dart';
 import 'formatting.dart' as format;
 
 class ResumeView {
 
   final Map<String,dynamic> _json;
-  int _experienceCount;
-  int _educationCount;
+  Resume _resume;
 
   ResumeView(this._json) {
-    _educationCount = _json['education'].length;
-    _experienceCount = _json['experience'].length;
+    _resume = Resume(_json);
   }
 
   Widget _printHeader() {
     return Center(
       child: Column (children: [
-        format.headerText(_json['name']),
-        format.paragraphText(_json['phoneNumber']),
-        format.paragraphText(_json['email']),
+        format.headerText(_resume.name),
+        format.paragraphText(_resume.email),
+        format.paragraphText(_resume.phoneNumber),
       ]),
     );
   }
 
 Widget _printExperience() {
-    var experience = _json['experience'];
-    var idx = 1;
     List<Widget> columnList= [];
-    experience.forEach((exp) {
-      print('Processing experience');
-      print(exp);
-      var entry = exp['${idx.toString()}'];
-      print(entry);
-      String title = entry[0]['title'];
-      String employer = entry[1]['employer'];
-      String desc = entry[2]['description'];
-      String dates = entry[3]['dates'];
 
-      columnList.add(format.headerText(title));
-      columnList.add(format.subHeadText(employer));
-      columnList.add(format.paragraphText(dates));
-      columnList.add(format.paragraphText(desc));
-      idx++;
+    _resume.experience.forEach((exp) {
+      columnList.add(format.headerText(exp.title));
+      columnList.add(format.subHeadText(exp.employer));
+      columnList.add(format.paragraphText(exp.dates));
+      columnList.add(format.paragraphText(exp.description));
     });
+
 
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
@@ -57,21 +46,11 @@ Widget _printExperience() {
   }
 
   Widget _printEducation() {
-    var education = _json['education'];
-    var idx = 1;
     List<Widget> columnList= [];
-    education.forEach((edu) {
-      print('Processing education');
-      print(edu);
-      var entry = edu['${idx.toString()}'];
-      print(entry);
-      String degree = entry[0]['degree'];
-      String uni = entry[1]['university'];
-      String year = entry[2]['year'];
-      columnList.add(format.headerText(degree));
-      columnList.add(format.subHeadText(uni));
-      columnList.add(format.paragraphText(year));
-      idx++;
+    _resume.education.forEach((edu) {
+      columnList.add(format.headerText(edu.degree));
+      columnList.add(format.subHeadText(edu.institution));
+      columnList.add(format.paragraphText(edu.dates));
     });
 
     return Padding(
@@ -96,25 +75,25 @@ Widget _printExperience() {
       ),
       format.formattedDivider(),
       Container(
-        child: format.paddedHeaderRow('EDUCATION'),
+        child: format.paddedHeaderRow(_resume.eduHeader),
         color: Colors.black87,
         height: 50,
       ),
       Container(
         child: _printEducation(),
         color: Colors.black87,
-        height: 88.0 * _educationCount,
+        height: 88.0 * _resume.educationCount,
       ),
       format.formattedDivider(),
       Container(
-        child: format.paddedHeaderRow('EXPERIENCE'),
+        child: format.paddedHeaderRow(_resume.expHeader),
         color: Colors.black87,
         height: 50,
       ),
       Container(
         child: _printExperience(),
         color: Colors.black87, 
-        height: 150.0 * _experienceCount,
+        height: 150.0 * _resume.experienceCount,
       ),
     ];
   }
