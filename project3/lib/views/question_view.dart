@@ -54,6 +54,7 @@ class _QuestionState extends State {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTapDown: (details){},
       onTap: () {
         setState(() {
             question.rotateText();

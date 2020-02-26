@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Styles {
+  static const _paddingFactor = 0.05;
+  static const _drawerFactor = 0.45;
+
   static const _textColorDark = {
-    'h1': Colors.white,
-    'h2': Colors.white,
-    'p': Colors.white
+    'h1Alt': Colors.white,
+    'h1': Colors.white70,
+    'h2': Colors.white70,
+    'p': Colors.white70,
   };
 
   static const _iconColorDark = {
@@ -13,13 +17,14 @@ class Styles {
   };
 
   static const _textColorLight = {
+    'h1Alt': Colors.white,
     'h1': Colors.black,
     'h2': Colors.black,
     'p': Colors.black
   };
   
   static const _iconColorLight = {
-    'settings': Colors.black,
+    'settings': Colors.white,
     'note': Colors.black,
   };
 
@@ -37,6 +42,7 @@ class Styles {
   var _themeIconColors;
   var _themeTextColors;
   final String _theme;
+  get theme => _theme;
 
   Styles(this._theme) {
     _themeIconColors = _theme.contains('dark') ? _iconColorDark : _iconColorLight;
@@ -47,6 +53,8 @@ class Styles {
   get themeTextColor => _themeTextColors;
   get textSizes => _textSizes;
   get iconSizes => _iconSizes;
+  get drawerFactor => _drawerFactor;
+  get paddingFactor => _paddingFactor;
 
   Widget formattedText(String text, String style){
     return Text(
@@ -55,7 +63,7 @@ class Styles {
     );
   }
 
-  Widget verticalPadding() {
-    return SizedBox(height: 10);
+  Widget verticalPadding(double val) {
+    return SizedBox(height: val);
   }
 }

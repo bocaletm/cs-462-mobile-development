@@ -13,18 +13,21 @@ class _AddEntryViewState extends State<AddEntryView> {
   static const _title = 'New Journal Entry';
   static const _style = 'h1';
   final Styles _styles = Styles('dark');
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
+          key: _scaffoldKey,
+          endDrawer: Container(child: Drawer(), width: MediaQuery.of(context).size.width * _styles.drawerFactor),
           appBar: AppBar(
             title: Center(child: _styles.formattedText(_title,_style)),
             actions: [ 
               IconButton(
                 icon: Icon(Icons.settings, color: _styles.themeIconColors[_iconName]), 
-                onPressed: null
+                onPressed: () => _scaffoldKey.currentState.openEndDrawer(),
               )
             ],
           ),
@@ -94,7 +97,7 @@ class _FormBodyState extends State<FormBody> {
                 validator: (value) => _validateEmpty(value),
                 onSaved: (value) => _entry.title = value,
               ),
-              _styles.verticalPadding(),
+              _styles.verticalPadding(MediaQuery.of(context).size.height * _styles.paddingFactor),
               TextFormField(
                 autofocus: true,
                 decoration: InputDecoration(
@@ -104,7 +107,7 @@ class _FormBodyState extends State<FormBody> {
                 validator: (value) => _validateEmpty(value),
                 onSaved: (value) => _entry.body = value,
               ),
-              _styles.verticalPadding(),
+              _styles.verticalPadding(MediaQuery.of(context).size.height * _styles.paddingFactor),
               TextFormField(
                 autofocus: true,
                 decoration: InputDecoration(
@@ -114,7 +117,7 @@ class _FormBodyState extends State<FormBody> {
                 validator: (value) => _validateInt(value),
                 onSaved: (value) => _entry.rating = int.parse(value),
               ),
-              _styles.verticalPadding(),
+              _styles.verticalPadding(MediaQuery.of(context).size.height * _styles.paddingFactor),
               RaisedButton(
                 onPressed: () {
                   if (_formKey.currentState.validate()) {

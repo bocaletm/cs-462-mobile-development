@@ -1,11 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:journal/styles/styles.dart';
 
-class Welcome extends StatelessWidget {
-  final Styles _styles = Styles('dark');
-  static const _title = 'Welcome';
+class Welcome extends StatefulWidget {
+  final bool _darkMode;
+  final void Function() _toggleDarkMode;  
+
+  Welcome(this._darkMode, this._toggleDarkMode, {Key key}) : super(key: key);
+
+  @override
+  _WelcomeState createState() => _WelcomeState(_darkMode, _toggleDarkMode);
+}
+
+class _WelcomeState extends State<Welcome> {
+
+  static const _addRoute = 'add-entry';
+  static const _drawerHeader = 'Settings';
+  static const _titleStyle = 'h1Alt';
+  static const _headStyle = 'h1';
+  static const _subheadStyle = 'h2';
   static const _subtitle = 'Journal';
-  static const _style = 'h1';
+  static const _title = 'Welcome';
+  static const _toggleHeader = 'Dark Mode';
+ 
+  final void Function() _toggleDarkMode;  
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool _darkMode;
+
+  Styles _styles;
+
+  _WelcomeState(this._darkMode, this._toggleDarkMode) {
+    _darkMode ? _styles = Styles('dark') : Styles('light');
+    print('created welcome page object with theme: ${_styles.theme}');
+  }
 
   Widget _centerIcon() {
     return Center(
@@ -15,7 +43,7 @@ class Welcome extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [ 
-            _styles.formattedText(_subtitle,_style),
+            _styles.formattedText(_subtitle,_headStyle),
             Icon(
               Icons.class_, 
               color: _styles.themeIconColors['note'], 
@@ -27,17 +55,49 @@ class Welcome extends StatelessWidget {
     );
   }
 
+  Widget _drawerContainer() {
+    return Container(
+      child: Drawer(
+        child: ListView(
+          padding: EdgeInsets.only(top: 0),
+          children: [ 
+            _styles.verticalPadding(MediaQuery.of(context).size.height * _styles.paddingFactor),
+            ListTile(title: _styles.formattedText(_drawerHeader, _headStyle)),
+            ListTile(
+              leading: _styles.formattedText(_toggleHeader, _subheadStyle),
+              trailing: Switch(
+                value: _darkMode, 
+                onChanged: (value) {
+                  _toggleDarkMode();
+                  setState(() {
+                    _darkMode = value;
+                    print('set dark mode to: $_darkMode in drawer');
+                  });
+                }
+              ),
+            ),
+          ]),
+      ), 
+      width: MediaQuery.of(context).size.width * _styles.drawerFactor,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('dark mode is: $_darkMode in build method');
+    _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
+    print('ran build method with theme: ${_styles.theme}');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
+          key: _scaffoldKey,
+          endDrawer: _drawerContainer(),
           appBar: AppBar(
-            title: Center(child: _styles.formattedText(_title,_style)),
+            title: Center(child: _styles.formattedText(_title,_titleStyle)),
             actions: [ 
               IconButton(
                 icon: Icon(Icons.settings, color: _styles.themeIconColors['settings']), 
-                onPressed: null
+                onPressed: () => _scaffoldKey.currentState.openEndDrawer(),
               )
             ],
           ),
@@ -45,7 +105,7 @@ class Welcome extends StatelessWidget {
           floatingActionButtonAnimator: null,
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
-            onPressed: () => Navigator.of(context).pushNamed('add-entry')
+            onPressed: () => Navigator.of(context).pushNamed(_addRoute),
           ),
         );
       },
