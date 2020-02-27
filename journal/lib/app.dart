@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:journal/views/journal_view.dart';
 import 'package:journal/views/welcome_view.dart';
-import 'package:journal/views/add_entry_view.dart';
 import 'package:journal/models/journal.dart';
 import 'package:journal/styles/styles.dart';
 
@@ -20,11 +19,6 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   static const _swatchColor = Colors.blue;
   static const _title = 'Journal';
-  static final _routes = {
-    'journal': (context) => JournalView(),
-    'add-entry': (context) => AddEntryView(),
-  };
-
 
   final Journal _journal;
 
@@ -38,7 +32,7 @@ class _AppState extends State<App> {
     if (_brightness == Brightness.dark) {
       _darkMode = true;
     }
-    _journal.isNotEmpty ? _landingPage = JournalView() : _landingPage = Welcome(_darkMode,toggleDarkMode);
+    _journal.isNotEmpty ? _landingPage = JournalView(_darkMode,toggleDarkMode) : _landingPage = Welcome(_darkMode,toggleDarkMode);
   }
 
   get styles => styles;
@@ -60,7 +54,6 @@ class _AppState extends State<App> {
         primarySwatch: _swatchColor,
       ),
       title: _title,
-      routes: _routes,
       home: _landingPage,
     );
   }

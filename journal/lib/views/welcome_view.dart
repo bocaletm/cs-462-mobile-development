@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:journal/styles/styles.dart';
+import 'package:journal/views/add_entry_view.dart';
 
 class Welcome extends StatefulWidget {
   final bool _darkMode;
@@ -105,7 +106,7 @@ class _WelcomeState extends State<Welcome> {
           floatingActionButtonAnimator: null,
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
-            onPressed: () => Navigator.of(context).pushNamed(_addRoute),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(_darkMode,_toggleDarkMode))),
           ),
         );
       },
