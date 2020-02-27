@@ -6,7 +6,6 @@ class Styles {
 
   static const _textColorDark = {
     'h1Alt': Colors.white,
-    'h2Alt': Colors.white,
     'h1': Colors.white70,
     'h2': Colors.white70,
     'p': Colors.white70,
@@ -19,7 +18,6 @@ class Styles {
 
   static const _textColorLight = {
     'h1Alt': Colors.white,
-    'h2Alt': Colors.white,
     'h1': Colors.black,
     'h2': Colors.black,
     'p': Colors.black
@@ -45,9 +43,7 @@ class Styles {
 
   static const _textSizes = {
     'h1': 20.0,
-    'h1Alt': 20.0,
     'h2': 16.0,
-    'h2Alt': 16.0,
     'p': 12.0,
   };
 

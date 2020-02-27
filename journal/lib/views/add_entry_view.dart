@@ -151,14 +151,14 @@ class _FormBodyState extends State<FormBody> {
               _entry.printAll();
             }
           },
-          child: _styles.formattedText(_saveLabel, 'h2Alt'),
+          child: _styles.formattedText(_saveLabel, 'h1Alt'),
           color: _styles.buttonColors['default'],
         ),
         RaisedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: _styles.formattedText(_cancelLabel, 'h2Alt'),
+          child: _styles.formattedText(_cancelLabel, 'h1Alt'),
           color: _styles.buttonColors['default'],
         )
       ],
