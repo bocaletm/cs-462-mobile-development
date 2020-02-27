@@ -98,6 +98,7 @@ class _FormBodyState extends State<FormBody> {
   static const _bodyLabel = 'Body';
   static const _ratingLabel = 'Rating';
   static const _saveLabel = 'Save';
+  static const _cancelLabel = 'Cancel';
   static const _submitMsg = 'Processing Data';
   static const _maxRating = 10;
   static const _minRating = 1;
@@ -125,6 +126,31 @@ class _FormBodyState extends State<FormBody> {
     return null;
   }
 
+  Widget _buttons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        RaisedButton(
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              Scaffold.of(context).showSnackBar(SnackBar(content: Text(_submitMsg)));
+              _formKey.currentState.save();
+              _entry.date();
+              _entry.printAll();
+            }
+          },
+          child: Text(_saveLabel),
+        ),
+        RaisedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(_cancelLabel),
+        )
+      ],
+    );
+  }
+
   Widget _entryForm(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(50),
@@ -133,6 +159,7 @@ class _FormBodyState extends State<FormBody> {
           key: _formKey,
           child: Column(
             children: [
+              _styles.verticalPadding(MediaQuery.of(context).size.height * _styles.paddingFactor),
               TextFormField(
                 autofocus: true,
                 decoration: InputDecoration(
@@ -163,17 +190,7 @@ class _FormBodyState extends State<FormBody> {
                 onSaved: (value) => _entry.rating = int.parse(value),
               ),
               _styles.verticalPadding(MediaQuery.of(context).size.height * _styles.paddingFactor),
-              RaisedButton(
-                onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    Scaffold.of(context).showSnackBar(SnackBar(content: Text(_submitMsg)));
-                    _formKey.currentState.save();
-                    _entry.date();
-                    _entry.printAll();
-                  }
-                },
-                child: Text(_saveLabel),
-              )
+              _buttons(context),
             ]
           )
         ),

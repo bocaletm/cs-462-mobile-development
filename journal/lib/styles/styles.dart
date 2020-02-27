@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Styles {
-  static const _paddingFactor = 0.05;
+  static const _paddingFactor = 0.03;
   static const _drawerFactor = 0.45;
 
   static const _textColorDark = {
