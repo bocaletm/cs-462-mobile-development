@@ -7,7 +7,7 @@ class AddEntryView extends StatefulWidget {
   final bool _darkMode;
   final void Function() _toggleDarkMode;
 
-  AddEntryView(this._darkMode,this._toggleDarkMode);
+  AddEntryView(this._darkMode,this._toggleDarkMode, {Key key}) : super(key: key);
 
   @override
   _AddEntryViewState createState() => _AddEntryViewState(_darkMode, _toggleDarkMode);
@@ -16,6 +16,7 @@ class AddEntryView extends StatefulWidget {
 class _AddEntryViewState extends State<AddEntryView> {
   static const _iconName = 'settings';
   static const _title = 'New Journal Entry';
+  static const _titleStyle = 'h1Alt';
   static const _drawerHeader = 'Settings';
   static const _headStyle = 'h1';
   static const _subheadStyle = 'h2';
@@ -31,7 +32,6 @@ class _AddEntryViewState extends State<AddEntryView> {
 
   _AddEntryViewState(this._darkMode, this._toggleDarkMode) {
     _darkMode ? _styles = Styles('dark') : Styles('light');
-    print('created add entry page object with theme: ${_styles.theme}');
   }
 
   Widget _drawerContainer() {
@@ -62,13 +62,14 @@ class _AddEntryViewState extends State<AddEntryView> {
 
   @override
   Widget build(BuildContext context) {
+    _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
           key: _scaffoldKey,
           endDrawer: _drawerContainer(),
           appBar: AppBar(
-            title: Center(child: _styles.formattedText(_title,_headStyle)),
+            title: Center(child: _styles.formattedText(_title,_titleStyle)),
             actions: [ 
               IconButton(
                 icon: Icon(Icons.settings, color: _styles.themeIconColors[_iconName]), 
@@ -76,7 +77,7 @@ class _AddEntryViewState extends State<AddEntryView> {
               )
             ],
           ),
-          body: FormBody(),
+          body: FormBody( () => _darkMode ),
         );
       },
     );
@@ -85,13 +86,16 @@ class _AddEntryViewState extends State<AddEntryView> {
 
 class FormBody extends StatefulWidget {
 
+  final bool Function() _darkMode;
+
+  FormBody(this._darkMode, {Key key}) : super(key: key);
+
   @override
-  _FormBodyState createState() => _FormBodyState();
+  _FormBodyState createState() => _FormBodyState(_darkMode);
 }
 
 class _FormBodyState extends State<FormBody> {
 
-  final Styles _styles = Styles('dark');
   static const _emptyFieldMsg = 'Please enter some text';
   static const _notIntMsg = 'Rating must be an integer (1-10)';
   static const _titleLabel = 'Title';
@@ -106,6 +110,14 @@ class _FormBodyState extends State<FormBody> {
   final _formKey = GlobalKey<FormState>();
 
   JournalEntry _entry = JournalEntry();
+
+  final bool Function() _darkMode;
+
+  Styles _styles;
+
+  _FormBodyState(this._darkMode) {
+    _darkMode() ? _styles = Styles('dark') : Styles('light');
+  }
 
   String _validateEmpty(var value) {
     if (value.isEmpty) {
@@ -139,13 +151,15 @@ class _FormBodyState extends State<FormBody> {
               _entry.printAll();
             }
           },
-          child: Text(_saveLabel),
+          child: _styles.formattedText(_saveLabel, 'h2Alt'),
+          color: _styles.buttonColors['default'],
         ),
         RaisedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text(_cancelLabel),
+          child: _styles.formattedText(_cancelLabel, 'h2Alt'),
+          color: _styles.buttonColors['default'],
         )
       ],
     );
@@ -200,6 +214,7 @@ class _FormBodyState extends State<FormBody> {
 
   @override
   Widget build(BuildContext context) {
+    _darkMode() ? _styles = Styles('dark') : _styles = Styles('light');
     return _entryForm(context);
   }
 }

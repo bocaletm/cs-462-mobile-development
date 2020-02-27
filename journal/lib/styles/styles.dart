@@ -6,6 +6,7 @@ class Styles {
 
   static const _textColorDark = {
     'h1Alt': Colors.white,
+    'h2Alt': Colors.white,
     'h1': Colors.white70,
     'h2': Colors.white70,
     'p': Colors.white70,
@@ -18,6 +19,7 @@ class Styles {
 
   static const _textColorLight = {
     'h1Alt': Colors.white,
+    'h2Alt': Colors.white,
     'h1': Colors.black,
     'h2': Colors.black,
     'p': Colors.black
@@ -28,6 +30,14 @@ class Styles {
     'note': Colors.black,
   };
 
+  static const _buttonColorDark = {
+    'default': Colors.teal,
+  };
+
+  static const _buttonColorLight = {
+    'default': Colors.blue,
+  };
+
   static const _iconSizes = {
     'settings': 20.0,
     'note': 50.0,
@@ -35,10 +45,13 @@ class Styles {
 
   static const _textSizes = {
     'h1': 20.0,
+    'h1Alt': 20.0,
     'h2': 16.0,
+    'h2Alt': 16.0,
     'p': 12.0,
   };
 
+  var _themeButtonColors;
   var _themeIconColors;
   var _themeTextColors;
   final String _theme;
@@ -47,6 +60,7 @@ class Styles {
   Styles(this._theme) {
     _themeIconColors = _theme.contains('dark') ? _iconColorDark : _iconColorLight;
     _themeTextColors = _theme.contains('dark') ? _textColorDark : _textColorLight;
+    _themeButtonColors = _theme.contains('dark') ? _buttonColorDark : _buttonColorLight;
   }
 
   get themeIconColors => _themeIconColors;
@@ -55,6 +69,7 @@ class Styles {
   get iconSizes => _iconSizes;
   get drawerFactor => _drawerFactor;
   get paddingFactor => _paddingFactor;
+  get buttonColors => _themeButtonColors;
 
   Widget formattedText(String text, String style){
     return Text(

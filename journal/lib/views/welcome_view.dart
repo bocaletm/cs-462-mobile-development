@@ -3,6 +3,7 @@ import 'package:journal/styles/styles.dart';
 import 'package:journal/views/add_entry_view.dart';
 
 class Welcome extends StatefulWidget {
+
   final bool _darkMode;
   final void Function() _toggleDarkMode;  
 
@@ -21,6 +22,7 @@ class _WelcomeState extends State<Welcome> {
   static const _subtitle = 'Journal';
   static const _title = 'Welcome';
   static const _toggleHeader = 'Dark Mode';
+  static const _iconName = 'settings';
  
   final void Function() _toggleDarkMode;  
 
@@ -92,7 +94,7 @@ class _WelcomeState extends State<Welcome> {
             title: Center(child: _styles.formattedText(_title,_titleStyle)),
             actions: [ 
               IconButton(
-                icon: Icon(Icons.settings, color: _styles.themeIconColors['settings']), 
+                icon: Icon(Icons.settings, color: _styles.themeIconColors[_iconName]), 
                 onPressed: () => _scaffoldKey.currentState.openEndDrawer(),
               )
             ],
