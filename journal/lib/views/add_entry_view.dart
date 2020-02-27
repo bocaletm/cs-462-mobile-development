@@ -50,7 +50,6 @@ class _AddEntryViewState extends State<AddEntryView> {
                   _toggleDarkMode();
                   setState(() {
                     _darkMode = value;
-                    print('set dark mode to: $_darkMode in drawer');
                   });
                 }
               ),

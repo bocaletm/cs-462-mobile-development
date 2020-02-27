@@ -29,7 +29,6 @@ class _JournalViewState extends State<JournalView> {
 
   _JournalViewState(this._darkMode, this._toggleDarkMode) {
     _darkMode ? _styles = Styles('dark') : Styles('light');
-    print('created journal view page object with theme: ${_styles.theme}');
   }
 
   Widget _orientedView(BuildContext context, BoxConstraints constraints) => constraints.maxWidth > 500 ? Horizontal() : Vertical();
@@ -50,7 +49,6 @@ class _JournalViewState extends State<JournalView> {
                   _toggleDarkMode();
                   setState(() {
                     _darkMode = value;
-                    print('set dark mode to: $_darkMode in drawer');
                   });
                 }
               ),
@@ -118,7 +116,7 @@ class OrientedView extends StatelessWidget {
 class Vertical extends OrientedView {
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.green[100], child: _journalListView);
+    return Container(child: _journalListView);
   }
 }
 
@@ -129,7 +127,6 @@ class Horizontal extends OrientedView {
       children: [
         Expanded(
           child: Container(
-            color: Colors.green[100],
             child: _journalListView
           )
         ),

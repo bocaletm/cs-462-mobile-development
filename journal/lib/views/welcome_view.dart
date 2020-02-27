@@ -14,7 +14,6 @@ class Welcome extends StatefulWidget {
 
 class _WelcomeState extends State<Welcome> {
 
-  static const _addRoute = 'add-entry';
   static const _drawerHeader = 'Settings';
   static const _titleStyle = 'h1Alt';
   static const _headStyle = 'h1';
@@ -33,7 +32,6 @@ class _WelcomeState extends State<Welcome> {
 
   _WelcomeState(this._darkMode, this._toggleDarkMode) {
     _darkMode ? _styles = Styles('dark') : Styles('light');
-    print('created welcome page object with theme: ${_styles.theme}');
   }
 
   Widget _centerIcon() {
@@ -72,7 +70,6 @@ class _WelcomeState extends State<Welcome> {
                   _toggleDarkMode();
                   setState(() {
                     _darkMode = value;
-                    print('set dark mode to: $_darkMode in drawer');
                   });
                 }
               ),
@@ -85,9 +82,7 @@ class _WelcomeState extends State<Welcome> {
 
   @override
   Widget build(BuildContext context) {
-    print('dark mode is: $_darkMode in build method');
     _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
-    print('ran build method with theme: ${_styles.theme}');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
