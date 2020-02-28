@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:journal/app.dart';
-
-import 'package:journal/models/preferences.dart';
 import 'package:journal/models/journal.dart';
 
-
 void main() async {
-  Preferences prefs = Preferences();
   Journal journal = Journal();
 
-  await prefs.getPrefs();
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
   await journal.getEntries();
 
-  Brightness brightness = (prefs.isDark ?? false) ? Brightness.dark: Brightness.light;
-
-  runApp(App(brightness, journal));
+  runApp(App(prefs, journal));
 }

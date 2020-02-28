@@ -4,13 +4,13 @@ import 'package:journal/views/form_body.dart';
 
 class AddEntryView extends StatefulWidget {
 
-  final bool _darkMode;
   final void Function() _toggleDarkMode;
+  final Styles Function() _getStyles;
 
-  AddEntryView(this._darkMode,this._toggleDarkMode, {Key key}) : super(key: key);
+  AddEntryView(this._getStyles,this._toggleDarkMode, {Key key}) : super(key: key);
 
   @override
-  _AddEntryViewState createState() => _AddEntryViewState(_darkMode, _toggleDarkMode);
+  _AddEntryViewState createState() => _AddEntryViewState(_getStyles, _toggleDarkMode);
 }
 
 class _AddEntryViewState extends State<AddEntryView> {
@@ -23,6 +23,7 @@ class _AddEntryViewState extends State<AddEntryView> {
   static const _toggleHeader = 'Dark Mode';
 
   final void Function() _toggleDarkMode;  
+  final Styles Function() _getStyles;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -30,8 +31,9 @@ class _AddEntryViewState extends State<AddEntryView> {
 
   Styles _styles;
 
-  _AddEntryViewState(this._darkMode, this._toggleDarkMode) {
-    _darkMode ? _styles = Styles('dark') : Styles('light');
+  _AddEntryViewState(this._getStyles, this._toggleDarkMode) {
+    _styles = _getStyles();
+    _darkMode = _styles.theme == 'dark' ? true : false;
   }
 
   Widget _drawerContainer() {
@@ -62,6 +64,7 @@ class _AddEntryViewState extends State<AddEntryView> {
 
   @override
   Widget build(BuildContext context) {
+    _styles = _getStyles();
     _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {

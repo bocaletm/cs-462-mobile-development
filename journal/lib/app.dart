@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:journal/views/journal_view.dart';
 import 'package:journal/views/welcome_view.dart';
 import 'package:journal/models/journal.dart';
@@ -6,14 +7,13 @@ import 'package:journal/styles/styles.dart';
 
 class App extends StatefulWidget {
 
-
-  final Brightness _brightness;
   final Journal _journal;
+  final SharedPreferences _prefs;
 
-  App(this._brightness, this._journal);
+  App(this._prefs,this._journal);
 
   @override
-  _AppState createState() => _AppState(_brightness, _journal);
+  _AppState createState() => _AppState(_prefs,_journal);
 }
 
 class _AppState extends State<App> {
@@ -21,28 +21,29 @@ class _AppState extends State<App> {
   static const _title = 'Journal';
 
   final Journal _journal;
+  final SharedPreferences _prefs;
 
-  Brightness _brightness;
-  bool _darkMode = false;
+  bool _darkMode;
   Styles _styles;
+  Brightness _brightness;
 
   Widget _landingPage;
 
-  _AppState(this._brightness, this._journal) {
-    if (_brightness == Brightness.dark) {
-      _darkMode = true;
-    }
-    _journal.isNotEmpty ? _landingPage = JournalView(_darkMode,toggleDarkMode) : _landingPage = Welcome(_darkMode,toggleDarkMode);
+  _AppState(this._prefs, this._journal) {
+    _darkMode =_prefs.containsKey('darkMode') ? _prefs.getBool('darkMode') : false;
+    _darkMode ? _brightness = Brightness.dark : _brightness = Brightness.light;
+    _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
+    _journal.isNotEmpty ? _landingPage = JournalView(false,toggleDarkMode) : _landingPage = Welcome(getStyles,toggleDarkMode);
   }
 
-  get styles => styles;
+  Styles getStyles() => _styles;
 
   void toggleDarkMode() {
     setState(() {
       _darkMode ? _darkMode = false : _darkMode = true;
       _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
-      print('set style to ${_styles.theme}');
       _darkMode ? _brightness = Brightness.dark : _brightness = Brightness.light;
+      _prefs.setBool('darkMode', _darkMode);
     });
   }
 

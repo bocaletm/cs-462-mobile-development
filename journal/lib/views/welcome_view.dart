@@ -4,13 +4,13 @@ import 'package:journal/views/add_entry_view.dart';
 
 class Welcome extends StatefulWidget {
 
-  final bool _darkMode;
+  final Styles Function() _getStyles;
   final void Function() _toggleDarkMode;  
 
-  Welcome(this._darkMode, this._toggleDarkMode, {Key key}) : super(key: key);
+  Welcome(this._getStyles, this._toggleDarkMode, {Key key}) : super(key: key);
 
   @override
-  _WelcomeState createState() => _WelcomeState(_darkMode, _toggleDarkMode);
+  _WelcomeState createState() => _WelcomeState(_getStyles, _toggleDarkMode);
 }
 
 class _WelcomeState extends State<Welcome> {
@@ -25,17 +25,18 @@ class _WelcomeState extends State<Welcome> {
   static const _iconName = 'settings';
  
   final void Function() _toggleDarkMode;  
+  final Styles Function() _getStyles;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Styles _styles;
   bool _darkMode;
 
-  Styles _styles;
-
-  _WelcomeState(this._darkMode, this._toggleDarkMode) {
-    _darkMode ? _styles = Styles('dark') : Styles('light');
+  _WelcomeState(this._getStyles, this._toggleDarkMode) {
+    _styles = _getStyles();
+    _darkMode = _styles.theme == 'dark' ? true : false;
   }
-
+  
   Widget _centerIcon() {
     return Center(
       child: Padding(
@@ -84,7 +85,7 @@ class _WelcomeState extends State<Welcome> {
 
   @override
   Widget build(BuildContext context) {
-    _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
+    _styles = _getStyles();
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
@@ -103,7 +104,7 @@ class _WelcomeState extends State<Welcome> {
           floatingActionButtonAnimator: null,
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(_darkMode,_toggleDarkMode))),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(_getStyles,_toggleDarkMode))),
           ),
         );
       },
