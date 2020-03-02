@@ -6,20 +6,20 @@ import 'package:journal/styles/styles.dart';
 
 class App extends StatefulWidget {
 
-  final bool _showWelcomePage;
+  final bool _skipWelcomePage;
   final SharedPreferences _prefs;
 
-  App(this._prefs,this._showWelcomePage);
+  App(this._prefs,this._skipWelcomePage);
 
   @override
-  _AppState createState() => _AppState(_prefs,_showWelcomePage);
+  _AppState createState() => _AppState(_prefs,_skipWelcomePage);
 }
 
 class _AppState extends State<App> {
   static const _swatchColor = Colors.blue;
   static const _title = 'Journal';
 
-  final bool _showWelcomePage;
+  final bool _skipWelcomePage;
   final SharedPreferences _prefs;
 
   bool _darkMode;
@@ -28,11 +28,11 @@ class _AppState extends State<App> {
 
   Widget _landingPage;
 
-  _AppState(this._prefs, this._showWelcomePage) {
+  _AppState(this._prefs, this._skipWelcomePage) {
     _darkMode =_prefs.containsKey('darkMode') ? _prefs.getBool('darkMode') : false;
     _darkMode ? _brightness = Brightness.dark : _brightness = Brightness.light;
     _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
-    _showWelcomePage ?  _landingPage = Welcome(getStyles,toggleDarkMode) : _landingPage = JournalView(getStyles,toggleDarkMode);
+    _skipWelcomePage ? _landingPage = JournalView(getStyles,toggleDarkMode) :  _landingPage = Welcome(getStyles,toggleDarkMode);
   }
 
   Styles getStyles() => _styles;

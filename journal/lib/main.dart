@@ -11,12 +11,11 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-      await deleteDatabase(dbName);
+  await deleteDatabase(dbName);
 
   final String schema = await rootBundle.loadString(schemaPath);
 
-  //final bool showWelcomePage =  await databaseExists(dbName); 
-  final bool showWelcomePage =  true; 
+  final bool skipWelcomePage =  await databaseExists(dbName); 
 
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   
@@ -28,5 +27,5 @@ void main() async {
   
   await db.close();
   
-  runApp(App(prefs, showWelcomePage));
+  runApp(App(prefs, skipWelcomePage));
 }
