@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:journal/styles/styles.dart';
 import 'package:journal/models/journal_entry.dart';
+import 'package:journal/models/journal.dart';
+
 
 class FormBody extends StatefulWidget {
 
   final bool Function() _darkMode;
 
-  FormBody(this._darkMode, {Key key}) : super(key: key);
+  final Journal _journal;
+
+  FormBody(this._darkMode, this._journal, {Key key}) : super(key: key);
 
   @override
-  _FormBodyState createState() => _FormBodyState(_darkMode);
+  _FormBodyState createState() => _FormBodyState(_darkMode, _journal);
 }
 
 class _FormBodyState extends State<FormBody> {
@@ -21,8 +25,9 @@ class _FormBodyState extends State<FormBody> {
   static const _ratingLabel = 'Rating';
   static const _saveLabel = 'Save';
   static const _cancelLabel = 'Cancel';
-  static const _submitMsg = 'Processing Data';
-  static const _maxRating = 10;
+  static const _saveSuccess = 'Entry Saved';
+  static const _saveFailure = 'Error Saving Entry';
+  static const _maxRating = 4;
   static const _minRating = 1;
 
   final _formKey = GlobalKey<FormState>();
@@ -31,9 +36,13 @@ class _FormBodyState extends State<FormBody> {
 
   final bool Function() _darkMode;
 
+  final Journal _journal;
+
   Styles _styles;
 
-  _FormBodyState(this._darkMode) {
+  String _submitMsg = '';
+
+  _FormBodyState(this._darkMode, this._journal) {
     _darkMode() ? _styles = Styles('dark') : Styles('light');
   }
 
@@ -61,12 +70,13 @@ class _FormBodyState extends State<FormBody> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         RaisedButton(
-          onPressed: () {
+          onPressed: () async {
             if (_formKey.currentState.validate()) {
-              Scaffold.of(context).showSnackBar(SnackBar(content: Text(_submitMsg)));
               _formKey.currentState.save();
               _entry.date();
-              _entry.printAll();
+              int id = await _journal.addEntry(_entry);
+              id > 0 ? _submitMsg = _saveSuccess : _submitMsg = _saveFailure;
+              Navigator.pop(context, _submitMsg);
             }
           },
           child: _styles.formattedText(_saveLabel, 'h1Alt'),

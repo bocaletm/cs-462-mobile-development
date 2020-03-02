@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:journal/styles/styles.dart';
 import 'package:journal/views/form_body.dart';
+import 'package:journal/models/journal.dart';
 
 class AddEntryView extends StatefulWidget {
 
@@ -21,6 +22,7 @@ class _AddEntryViewState extends State<AddEntryView> {
   static const _headStyle = 'h1';
   static const _subheadStyle = 'h2';
   static const _toggleHeader = 'Dark Mode';
+  static const _dbName = 'journal.db';
 
   final void Function() _toggleDarkMode;  
   final Styles Function() _getStyles;
@@ -31,9 +33,12 @@ class _AddEntryViewState extends State<AddEntryView> {
 
   Styles _styles;
 
+  Journal _journal;
+
   _AddEntryViewState(this._getStyles, this._toggleDarkMode) {
     _styles = _getStyles();
     _darkMode = _styles.theme == 'dark' ? true : false;
+    _journal = Journal(_dbName);
   }
 
   Widget _drawerContainer() {
@@ -65,7 +70,6 @@ class _AddEntryViewState extends State<AddEntryView> {
   @override
   Widget build(BuildContext context) {
     _styles = _getStyles();
-    _darkMode ? _styles = Styles('dark') : _styles = Styles('light');
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
@@ -80,10 +84,9 @@ class _AddEntryViewState extends State<AddEntryView> {
               )
             ],
           ),
-          body: FormBody( () => _darkMode ),
+          body: FormBody( () => _darkMode, _journal ),
         );
       },
     );
   }
 }
-

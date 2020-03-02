@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:journal/styles/styles.dart';
 import 'package:journal/views/add_entry_view.dart';
+import 'package:journal/views/journal_view.dart';
 
 class Welcome extends StatefulWidget {
 
@@ -23,6 +26,7 @@ class _WelcomeState extends State<Welcome> {
   static const _title = 'Welcome';
   static const _toggleHeader = 'Dark Mode';
   static const _iconName = 'settings';
+  static const _snackbarSleep = 500;
  
   final void Function() _toggleDarkMode;  
   final Styles Function() _getStyles;
@@ -55,6 +59,21 @@ class _WelcomeState extends State<Welcome> {
         ),
       ),
     );
+  }
+
+_navigateToFormAndDisplayResult(BuildContext context) async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(_getStyles,_toggleDarkMode)));
+    if (result != null) {
+      _scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: _styles.formattedText('$result', _titleStyle)));
+
+      Future.delayed(const Duration(milliseconds: _snackbarSleep), () {
+        setState(() {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => JournalView(_getStyles,_toggleDarkMode)));
+        });
+      });
+    }
   }
 
   Widget _drawerContainer() {
@@ -104,7 +123,7 @@ class _WelcomeState extends State<Welcome> {
           floatingActionButtonAnimator: null,
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(_getStyles,_toggleDarkMode))),
+            onPressed: () => _navigateToFormAndDisplayResult(context),
           ),
         );
       },

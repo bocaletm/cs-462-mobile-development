@@ -1,5 +1,5 @@
 name: journal
-description: A new Flutter project.
+description: A journal exploration project with darkmode feature.
 
 version: 1.0.0+1
 
@@ -7,6 +7,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  sqflite: ^1.1.8
   shared_preferences: ^0.5.4
   intl: ^0.16.1
   flutter:
@@ -20,3 +21,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/schema.sql

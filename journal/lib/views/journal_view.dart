@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:journal/models/journal.dart';
+import 'package:journal/models/journal_entry.dart';
 import 'package:journal/styles/styles.dart';
+import 'package:journal/views/add_entry_view.dart';
+import 'package:journal/views/vertical.dart';
+import 'package:journal/views/horizontal.dart';
+
 
 class JournalView extends StatefulWidget {
 
-  final bool _darkMode;
+  final Styles Function() _getStyles;
   final void Function() _toggleDarkMode;  
   
-  JournalView(this._darkMode, this._toggleDarkMode);
+  JournalView(this._getStyles, this._toggleDarkMode);
 
   @override
-  _JournalViewState createState() => _JournalViewState(_darkMode, _toggleDarkMode);
+  _JournalViewState createState() => _JournalViewState(_getStyles, _toggleDarkMode);
 }
 
 class _JournalViewState extends State<JournalView> {
@@ -19,19 +24,34 @@ class _JournalViewState extends State<JournalView> {
   static const _headStyle = 'h1';
   static const _subheadStyle = 'h2';
   static const _toggleHeader = 'Dark Mode';
-  static const _header = 'Journal Entries';
-  final void Function() _toggleDarkMode;  
+  static const _title = 'Journal Entries';
+  static const _titleStyle = 'h1Alt';
+  static const _iconName = 'settings';
+  static const _dbName = 'journal.db';
+  
+  final void Function() _toggleDarkMode;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final Styles Function() _getStyles;
   bool _darkMode;
   Styles _styles;
+  Journal _journal;
 
-  _JournalViewState(this._darkMode, this._toggleDarkMode) {
-    _darkMode ? _styles = Styles('dark') : Styles('light');
+  _JournalViewState(this._getStyles, this._toggleDarkMode) {
+    _styles = _getStyles();
+    _darkMode = _styles.theme == 'dark' ? true : false;
+    _journal = Journal(_dbName);
   }
 
-  Widget _orientedView(BuildContext context, BoxConstraints constraints) => constraints.maxWidth > 500 ? Horizontal() : Vertical();
+  Future<List<JournalEntry>> getJournalEntries() async {
+    await _journal.getEntries();
+    return _journal.entries;
+  }
+
+  Widget _orientedView(BuildContext context, BoxConstraints constraints) {
+    return constraints.maxWidth > 500 ? Horizontal(getJournalEntries, _getStyles) : Vertical(getJournalEntries, _getStyles);
+  }
 
   Widget _drawerContainer() {
     return Container(
@@ -59,81 +79,39 @@ class _JournalViewState extends State<JournalView> {
     );
   }
 
+  _navigateToFormAndDisplayResult(BuildContext context) async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(_getStyles,_toggleDarkMode)));
+              
+    _scaffoldKey.currentState
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: _styles.formattedText('$result', _titleStyle)));
+  }
+
   @override
   Widget build(BuildContext context) {
+    _styles = _getStyles();
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
           key: _scaffoldKey,
           endDrawer: _drawerContainer(),
           appBar: AppBar(
-            leading: Container(),
-            title: Center(child: _styles.formattedText(_header, 'h1')),
+            title: Center(child: _styles.formattedText(_title,_titleStyle)),
             actions: [ 
               IconButton(
-                icon: Icon(Icons.settings, color: _styles.themeIconColors['settings']), 
+                icon: Icon(Icons.settings, color: _styles.themeIconColors[_iconName]), 
                 onPressed: () => _scaffoldKey.currentState.openEndDrawer(),
               )
             ],
           ),
           body: LayoutBuilder(builder: _orientedView),
+          floatingActionButtonAnimator: null,
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () => _navigateToFormAndDisplayResult(context),
+          ),
         );
       },
-    );
-  }
-}
-
-class OrientedView extends StatelessWidget {
-
-  final _items = List<Map>.generate(100,(i){
-    return {
-      'title':'Item $i',
-      'subtitle':'Subtitle for $i',
-    };
-  });
-
-  Widget _journalListView;
-
-  OrientedView() {
-    _journalListView = ListView.builder(
-      itemBuilder: (context,index){
-        return ListTile(
-          leading: Icon(Icons.star),
-          trailing: Icon(Icons.pool),
-          title: Text(_items[index]['title']),
-          subtitle: Text(_items[index]['subtitle']),
-        );
-      }
-    );
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    return Container(color: Colors.white);
-  }
-}
-
-class Vertical extends OrientedView {
-  @override
-  Widget build(BuildContext context) {
-    return Container(child: _journalListView);
-  }
-}
-
-class Horizontal extends OrientedView {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            child: _journalListView
-          )
-        ),
-        Expanded(
-          child: Container(color: Colors.red[100])
-        ),
-      ],
     );
   }
 }

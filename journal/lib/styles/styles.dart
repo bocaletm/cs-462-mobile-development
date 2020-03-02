@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Styles {
   static const _paddingFactor = 0.03;
   static const _drawerFactor = 0.45;
+  static const _maxRating = 4;
 
   static const _textColorDark = {
     'h1Alt': Colors.white,
@@ -76,5 +77,16 @@ class Styles {
 
   Widget verticalPadding(double val) {
     return SizedBox(height: val);
+  }
+
+  Widget stars(int num) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(_maxRating, (index) {
+        return Icon(
+          index < num ? Icons.star : Icons.star_border,
+        );
+      }),
+    );
   }
 }
