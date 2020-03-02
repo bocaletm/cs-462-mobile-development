@@ -11,7 +11,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await deleteDatabase(dbName);
+  //await deleteDatabase(dbName);
 
   final String schema = await rootBundle.loadString(schemaPath);
 
