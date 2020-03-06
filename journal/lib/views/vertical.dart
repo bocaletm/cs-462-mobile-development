@@ -26,19 +26,21 @@ class _VerticalState extends State<Vertical> {
     Widget ratingStars = _styles.stars(entry.rating);
 
     return Scaffold(
-      body: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: vsize / 4,
-              ),
-              _styles.formattedText(entry.title, 'h1'),
-              ratingStars,
-              SizedBox(
-                height: vsize / 15,
-              ),
-              _styles.formattedText(entry.body, 'h2'),
-          ]),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: vsize / 4),
+                  _styles.formattedText(entry.title, 'h1'),
+                  Divider(),
+                  ratingStars,
+                  SizedBox(height: vsize / 15),
+                  _styles.formattedText(entry.body, 'h2'),
+              ]),
+            ),
+        ),
       ),
     );
   }
@@ -101,6 +103,7 @@ class _VerticalState extends State<Vertical> {
 
   @override
   Widget build(BuildContext context) {
+    _styles = widget._getStyles();
     return Container(child: _journalListView());
   }
 }

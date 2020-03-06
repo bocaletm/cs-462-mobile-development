@@ -57,18 +57,20 @@ class _HorizontalState extends State<Horizontal> {
 
       return Scaffold(
         body: Center(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: vsize / 15,
-                ),
-                _styles.formattedText(_focused.title, 'h1'),
-                ratingStars,
-                SizedBox(
-                  height: vsize / 15,
-                ),
-                _styles.formattedText(_focused.body, 'h2'),
-            ]),
+            child: SingleChildScrollView(
+                child: Column(
+                children: [
+                  SizedBox(
+                    height: vsize / 15,
+                  ),
+                  _styles.formattedText(_focused.title, 'h1'),
+                  ratingStars,
+                  SizedBox(
+                    height: vsize / 15,
+                  ),
+                  _styles.formattedText(_focused.body, 'h2'),
+              ]),
+            ),
         ),
       );
     }
@@ -82,6 +84,7 @@ class _HorizontalState extends State<Horizontal> {
 
   @override
   Widget build(BuildContext context) {
+    _styles = widget._getStyles();
     return Row(
       children: [
         Expanded(
