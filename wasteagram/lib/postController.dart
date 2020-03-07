@@ -81,4 +81,13 @@ class PostController {
       });
     print('Successfully wrote post \'${_post.name}\' to database');
   }
+
+  Stream<QuerySnapshot> readPosts() {
+    Firestore.instance.collection(firestoreCollection).snapshots();
+  }
+
+  Future<dynamic> downloadImage() async {
+    
+  }
+
 }
