@@ -1,45 +1,85 @@
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:location/location.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:built_value/built_value.dart';
+import 'package:wasteagram/helpers/exceptions.dart';
 import 'package:wasteagram/models/post.dart';
 
+
 class PostController {
+
+  static const String firestoreCollection = 'posts';
   Post _post;
 
-  Future uploadImage() async {
-    var image;
-    String url;
+  Future createPost(String title) async {
     try {
-      image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      StorageReference storageReference = 
-        FirebaseStorage.instance.ref().child(new DateTime.now().millisecondsSinceEpoch.toString());
-      StorageUploadTask uploadTask = storageReference.putFile(image);
-      await uploadTask.onComplete;
-      final url = await storageReference.getDownloadURL();
-      print('Successfully uploaded $url');
+      final LocationData _locationData = await _getLatitudeAndLongitude();
+      await _uploadImage(_locationData.latitude,_locationData.longitude,title);
+      await _addToDB();
     } catch(e) {
-      print('ERROR: uploadImage() failed');
       print(e);
     }
+  }
+  
+  Future _uploadImage(double latitude, double longitude, String title) async {
+    var image;
+    String url;
+    image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    StorageReference storageReference = 
+      FirebaseStorage.instance.ref().child('${title}_${DateTime.now().millisecondsSinceEpoch.toString()}');
+    StorageUploadTask uploadTask = storageReference.putFile(image);
+    await uploadTask.onComplete;
+    url = await storageReference.getDownloadURL();
+    print('Successfully uploaded $url');
 
     if (url.isNotEmpty) {
-      _post = Post(url,DateTime.now(), 0,'title',0,0);
-      try {
-        await _addToDB();
-        await _getLatitudeAndLongitude();
-      } catch (e) {
-
-      }
-    } 
+      _post = Post(url,DateTime.now(), 0,title,latitude,longitude);
+      print('Populated Post object');
+      print(_post.toJson().toString());
+    } else {
+      if (image == null) throw ImageUploadException('ImagePicker error, image is null');
+      if (storageReference == null) throw ImageUploadException('unable to obtain storage reference');
+      throw ImageUploadException('unable to obtain image url from storage');
+    }
   }
 
-  Future _getLatitudeAndLongitude() {
+  Future<LocationData> _getLatitudeAndLongitude() async {
 
+    Location location = new Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        throw LocationServicesException('service not enabled');
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.DENIED) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.GRANTED) {
+        throw LocationServicesException('location permission not granted');
+      }
+    }
+    return location.getLocation();
   }
 
   Future _addToDB() async {
-    
+    Timestamp _postDate =  Timestamp.fromMillisecondsSinceEpoch(_post.date.millisecondsSinceEpoch);
+    await Firestore.instance.collection(firestoreCollection).document()
+      .setData({ 
+        'imageUrl': _post.imageUrl,
+        'date': _postDate, 
+        'count': _post.count, 
+        'name': _post.name, 
+        'latitude': _post.latitude,
+        'longitude': _post.longitude,
+      });
+    print('Successfully wrote post \'${_post.name}\' to database');
   }
-  
-
-
 }

@@ -8,14 +8,14 @@ class Post {
   final DateFormat _dateFormat = DateFormat("EEEE, MMMM d, yyyy");  
   final String imageUrl;
   final DateTime date;
-  String _dateString;
+  String dateString;
   final int count;
   final String name;
   final double latitude;
   final double longitude;
 
   Post(this.imageUrl, this.date, this.count, this.name, this.latitude, this.longitude) {
-    _dateString = _dateFormat.format(date);
+    dateString = _dateFormat.format(date);    
   }
 
   /// A necessary factory constructor for creating a new User instance

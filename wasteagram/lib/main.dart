@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:wasteagram/postController.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,6 +21,7 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
+  final PostController _postController = PostController();
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -31,13 +31,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _uploadImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    StorageReference storageReference = 
-      FirebaseStorage.instance.ref().child(new DateTime.now().millisecondsSinceEpoch.toString());
-      StorageUploadTask uploadTask = storageReference.putFile(image);
-      await uploadTask.onComplete;
-      final url = await storageReference.getDownloadURL();
-      print('Uploaded: $url');
+    
+    widget._postController.createPost('title');
     
     setState(() {
       _counter++;
