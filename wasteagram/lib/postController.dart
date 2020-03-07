@@ -2,7 +2,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:built_value/built_value.dart';
 import 'package:wasteagram/helpers/exceptions.dart';
 import 'package:wasteagram/models/post.dart';
 
