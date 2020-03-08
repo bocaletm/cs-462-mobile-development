@@ -11,6 +11,8 @@ class PostController {
   static const String firestoreCollection = 'posts';
   Post _post;
 
+  String getLastUploaded() => _post?.imageUrl != null ? _post?.imageUrl : '';
+
   Future createPost(String title) async {
     try {
       final LocationData _locationData = await _getLatitudeAndLongitude();
@@ -84,10 +86,6 @@ class PostController {
 
   Stream<QuerySnapshot> readPosts() {
     Firestore.instance.collection(firestoreCollection).snapshots();
-  }
-
-  Future<dynamic> downloadImage() async {
-    
   }
 
 }

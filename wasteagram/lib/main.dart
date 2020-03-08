@@ -28,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   int _counter = 0;
 
   void _uploadImage() async {
@@ -41,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _image = widget._postController.getLastUploaded().isNotEmpty ? Image.network(widget._postController.getLastUploaded()) : CircularProgressIndicator(); 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -56,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+            _image,
           ],
         ),
       ),
