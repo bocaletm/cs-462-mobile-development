@@ -9,6 +9,8 @@ import 'package:wasteagram/models/post.dart';
 class PostController {
 
   static const String firestoreCollection = 'posts';
+  static const String firestoreCounter = 'counter';
+
   Post _post;
 
   String getLastUploaded() => _post?.imageUrl != null ? _post?.imageUrl : '';
@@ -88,4 +90,23 @@ class PostController {
     Firestore.instance.collection(firestoreCollection).snapshots();
   }
 
+  void incrementCounter() async {
+    await Firestore.instance
+        .collection(firestoreCounter)
+        .document(firestoreCounter)
+        .updateData({
+          "counter":FieldValue.increment(1)
+        });
+  }
+
+  Future<dynamic> getNumPosts() async {
+
+    var count = Firestore.instance
+        .collection(firestoreCounter)
+        .orderBy(firestoreCounter)
+        .limit(1)
+        .getDocuments()
+        .then( (snapshot) => snapshot.documents[0].data[firestoreCounter]);
+    return count;
+  }
 }
