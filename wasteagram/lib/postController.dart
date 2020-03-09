@@ -87,7 +87,7 @@ class PostController {
   }
 
   Stream<QuerySnapshot> readPosts() {
-    Firestore.instance.collection(firestoreCollection).snapshots();
+    return Firestore.instance.collection(firestoreCollection).snapshots();
   }
 
   void incrementCounter() async {
@@ -108,5 +108,13 @@ class PostController {
         .getDocuments()
         .then( (snapshot) => snapshot.documents[0].data[firestoreCounter]);
     return count;
+  }
+
+  Post postFromData(dynamic data) {
+    //  Post(this.imageUrl, this.date, this.count, this.name, this.latitude, this.longitude) {
+    //return Post(data['date'],)
+    dynamic newMap = data;
+    newMap['date'] = data['date'].toDate();
+    return Post.fromJson(newMap);
   }
 }

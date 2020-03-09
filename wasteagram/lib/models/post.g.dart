@@ -9,17 +9,18 @@ part of 'post.dart';
 Post _$PostFromJson(Map<String, dynamic> json) {
   return Post(
     json['imageUrl'] as String,
-    json['date'] == null ? null : DateTime.parse(json['date'] as String),
+    json['date'] == null ? null : json['date'],
     json['count'] as int,
     json['name'] as String,
     (json['latitude'] as num)?.toDouble(),
     (json['longitude'] as num)?.toDouble(),
-  );
+  )..dateString = json['dateString'] as String;
 }
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'imageUrl': instance.imageUrl,
       'date': instance.date?.toIso8601String(),
+      'dateString': instance.dateString,
       'count': instance.count,
       'name': instance.name,
       'latitude': instance.latitude,
