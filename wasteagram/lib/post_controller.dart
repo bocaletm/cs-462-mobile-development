@@ -15,17 +15,17 @@ class PostController {
 
   String getLastUploaded() => _post?.imageUrl != null ? _post?.imageUrl : '';
 
-  Future createPost(String title) async {
+  Future createPost(String title, int count) async {
     try {
       final LocationData _locationData = await _getLatitudeAndLongitude();
-      await _uploadImage(_locationData.latitude,_locationData.longitude,title);
+      await _uploadImage(_locationData.latitude, _locationData.longitude, count, title);
       await _addToDB();
     } catch(e) {
       print(e);
     }
   }
   
-  Future _uploadImage(double latitude, double longitude, String title) async {
+  Future _uploadImage(double latitude, double longitude, int count, String title) async {
     var image;
     String url;
     image = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -37,7 +37,7 @@ class PostController {
     print('Successfully uploaded $url');
 
     if (url.isNotEmpty) {
-      _post = Post(url,DateTime.now(), 0,title,latitude,longitude);
+      _post = Post(url,DateTime.now(),count,title,latitude,longitude);
       print('Populated Post object');
       print(_post.toJson().toString());
     } else {

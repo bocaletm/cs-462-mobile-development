@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wasteagram/postController.dart';
 import 'package:wasteagram/views/post_list.dart';
 
 class App extends StatefulWidget {
