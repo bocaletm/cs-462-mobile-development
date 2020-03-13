@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wasteagram/post_controller.dart';
 import 'package:wasteagram/models/post.dart';
 import 'package:wasteagram/helpers/formatting.dart';
+import 'package:wasteagram/views/add_entry_view.dart';
 
 class PostList extends StatefulWidget {
   PostList({Key key}) : super(key: key);
@@ -18,25 +20,32 @@ class _PostListState extends State<PostList> {
 
   static const String titlePrefix = 'Wasteagram ';
 
+  static const _snackbarSleep = 500;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   int _counter = 0;
 
   String _title = '';
 
   OverlayEntry _overlayEntry;
 
-  void _uploadImage() async {
-    
-    widget._postController.createPost('title',0);
-    widget._postController.incrementCounter();
-    
+  void _getImageAndCreatePost() async {
+    final image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    //widget._postController.createPost(image,'title',0);
+    //widget._postController.incrementCounter();
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddEntryView(widget._postController)));
+
+    var newCounter = await widget._postController.getCounter();
+
     setState(() {
-      _counter++;
+      _counter = newCounter;
       _title = '$titlePrefix$_counter';
     });
   }
 
   Future<int> _getCounter() async {
-    int counter = await widget._postController.getNumPosts();
+    int counter = await widget._postController.getCounter();
     return counter;
   }
 
@@ -58,11 +67,28 @@ class _PostListState extends State<PostList> {
         height: size.height * heightFactor,
         width: size.width * widthFactor,
         child: FloatingActionButton(
+          heroTag: post.date.toString(),
           child: Text(post.count.toString()),
           onPressed: () => _insertOverlay(context, post),
         ),
       ),
     );
+  }
+
+  _navigateToFormAndDisplayResult(BuildContext context) async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(widget._postController)));
+    if (result != null) {
+      _scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text('$result')));
+
+      Future.delayed(const Duration(milliseconds: _snackbarSleep), () {
+        setState(() {
+          //refresh the page after snackbar is shown
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PostList()));
+        });
+      });
+    }
   }
 
   void _hideOverlay() {
@@ -128,6 +154,7 @@ class _PostListState extends State<PostList> {
   }
 
   Widget _streamedListView(BuildContext context) {
+    double bottomPadding = MediaQuery.of(context).size.height / 10;
     return StreamBuilder(
       stream: widget._postController.readPosts(),
       builder: (context, snapshot) {
@@ -135,6 +162,7 @@ class _PostListState extends State<PostList> {
           return CircularProgressIndicator();
         } else {
           return ListView.separated(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, bottomPadding),
             separatorBuilder: (context, index) => Divider(
               color: Colors.black,
             ),
@@ -163,8 +191,11 @@ class _PostListState extends State<PostList> {
         title: Center(child: Text(_title)),
       ),
       body: _streamedListView(context),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _uploadImage(),
+        heroTag: 'main',
+        
+        onPressed: () => {},
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), 

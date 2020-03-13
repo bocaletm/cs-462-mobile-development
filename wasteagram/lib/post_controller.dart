@@ -1,7 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:wasteagram/helpers/exceptions.dart';
 import 'package:wasteagram/models/post.dart';
 
@@ -15,20 +14,18 @@ class PostController {
 
   String getLastUploaded() => _post?.imageUrl != null ? _post?.imageUrl : '';
 
-  Future createPost(String title, int count) async {
+  Future createPost(dynamic image, String title, int count) async {
     try {
       final LocationData _locationData = await _getLatitudeAndLongitude();
-      await _uploadImage(_locationData.latitude, _locationData.longitude, count, title);
+      await _uploadImage(image, _locationData.latitude, _locationData.longitude, count, title);
       await _addToDB();
     } catch(e) {
       print(e);
     }
   }
   
-  Future _uploadImage(double latitude, double longitude, int count, String title) async {
-    var image;
+  Future _uploadImage(dynamic image, double latitude, double longitude, int count, String title) async {
     String url;
-    image = await ImagePicker.pickImage(source: ImageSource.gallery);
     StorageReference storageReference = 
       FirebaseStorage.instance.ref().child('${title}_${DateTime.now().millisecondsSinceEpoch.toString()}');
     StorageUploadTask uploadTask = storageReference.putFile(image);
@@ -99,7 +96,7 @@ class PostController {
         });
   }
 
-  Future<dynamic> getNumPosts() async {
+  Future<dynamic> getCounter() async {
 
     var count = Firestore.instance
         .collection(firestoreCounter)
