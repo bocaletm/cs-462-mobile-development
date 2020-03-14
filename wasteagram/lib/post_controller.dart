@@ -4,7 +4,6 @@ import 'package:location/location.dart';
 import 'package:wasteagram/helpers/exceptions.dart';
 import 'package:wasteagram/models/post.dart';
 
-
 class PostController {
 
   static const String firestoreCollection = 'posts';

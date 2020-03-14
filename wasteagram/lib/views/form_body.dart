@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wasteagram/post_controller.dart';
+import 'package:wasteagram/helpers/image_proc.dart';
 
 class FormBody extends StatefulWidget {
 
@@ -44,6 +45,7 @@ class _FormBodyState extends State<FormBody> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         RaisedButton(
+          color: Colors.blue,
           onPressed: () async {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
@@ -52,19 +54,15 @@ class _FormBodyState extends State<FormBody> {
               Navigator.pop(context, _submitMsg);
             }
           },
-          child: Text(_saveLabel),
+          child: Icon(Icons.cloud_upload,color: Colors.white),
         ),
-        RaisedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(_cancelLabel),
-        )
       ],
     );
   }
 
   Widget _entryForm(BuildContext context) {
+    var vsize = MediaQuery.of(context).size.height;
+    var hsize = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.all(50),
       child: SingleChildScrollView(
@@ -72,6 +70,20 @@ class _FormBodyState extends State<FormBody> {
           key: _formKey,
           child: Column(
             children: [
+              Divider(),
+              Container(
+                height: vsize / 3,
+                width: hsize / 2,
+                child: FutureBuilder(
+                  future: ImageProc.loadImageFromCache(),
+                  builder: (context, snapshot) {
+                    if(!snapshot.hasData) {
+                      return Text('loading...');
+                    }
+                    return ImageProc.imgFromBase64(snapshot.data);
+                  }     
+                ),
+              ),
               Divider(),
               TextFormField(
                 autofocus: true,

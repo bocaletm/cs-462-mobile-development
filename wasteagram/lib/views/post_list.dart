@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wasteagram/helpers/image_proc.dart';
 import 'package:wasteagram/post_controller.dart';
 import 'package:wasteagram/models/post.dart';
 import 'package:wasteagram/helpers/formatting.dart';
@@ -20,7 +21,7 @@ class _PostListState extends State<PostList> {
 
   static const String titlePrefix = 'Wasteagram ';
 
-  static const _snackbarSleep = 500;
+  static const _snackbarSleep = 1000;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -30,8 +31,9 @@ class _PostListState extends State<PostList> {
 
   OverlayEntry _overlayEntry;
 
-  void _getImageAndCreatePost() async {
+  void _getImageAndCreatePost(BuildContext context) async {
     final image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    ImageProc.cacheImage(ImageProc.base64String(image.readAsBytesSync()));
     //widget._postController.createPost(image,'title',0);
     //widget._postController.incrementCounter();
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddEntryView(widget._postController)));
@@ -77,7 +79,7 @@ class _PostListState extends State<PostList> {
 
   _navigateToFormAndDisplayResult(BuildContext context) async {
     final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(widget._postController)));
-    if (result != null) {
+    if (result != null || result == null) {
       _scaffoldKey.currentState
         ..removeCurrentSnackBar()
         ..showSnackBar(SnackBar(content: Text('$result')));
@@ -195,7 +197,7 @@ class _PostListState extends State<PostList> {
       floatingActionButton: FloatingActionButton(
         heroTag: 'main',
         
-        onPressed: () => {},
+        onPressed: () => _getImageAndCreatePost(context),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), 
