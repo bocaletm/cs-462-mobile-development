@@ -166,7 +166,7 @@ class _PostListState extends State<PostList> {
             ),
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
-              Post post = widget._postController.postFromData(snapshot.data.documents[index].data);
+              Post post = PostController.postFromData(snapshot.data.documents[index].data);
               post.datePost();
               return _dateTile(context, post);
             },

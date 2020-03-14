@@ -111,7 +111,7 @@ class PostController {
     return count;
   }
 
-  Post postFromData(dynamic data) {
+  static Post postFromData(dynamic data) {
     dynamic newMap = data;
     newMap['date'] = data['date'].toDate();
     return Post.fromJson(newMap);
