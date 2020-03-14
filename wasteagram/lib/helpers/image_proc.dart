@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,10 +23,20 @@ class ImageProc {
     return base64Encode(data);
   }
 
+  static Uint8List dataFromBase64(String base64Str) {
+    return base64Decode(base64Str);
+  }
+
   static Image imgFromBase64(String base64Str) {
     return Image.memory(
       base64Decode(base64Str),
       fit: BoxFit.fill,
     );
   }
+
+  static Future<File> imageFileFromData(Uint8List data) async {
+    final file = File('${(await getTemporaryDirectory()).path}/temp');
+    return file.writeAsBytes(data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+  }
+
 }

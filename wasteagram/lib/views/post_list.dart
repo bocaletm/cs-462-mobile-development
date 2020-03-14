@@ -21,29 +21,33 @@ class _PostListState extends State<PostList> {
 
   static const String titlePrefix = 'Wasteagram ';
 
-  static const _snackbarSleep = 1000;
+  static const _snackbarSleep = 1500;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  int _counter = 0;
 
   String _title = '';
 
   OverlayEntry _overlayEntry;
 
-  void _getImageAndCreatePost(BuildContext context) async {
+  void _getImageAndNavToForm(BuildContext context) async {
     final image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    ImageProc.cacheImage(ImageProc.base64String(image.readAsBytesSync()));
-    //widget._postController.createPost(image,'title',0);
-    //widget._postController.incrementCounter();
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => AddEntryView(widget._postController)));
+    await ImageProc.cacheImage(ImageProc.base64String(image.readAsBytesSync()));
+    await _navigateToFormAndDisplayResult(context);
+    _setCounter();
+  }
 
-    var newCounter = await widget._postController.getCounter();
+  _navigateToFormAndDisplayResult(BuildContext context) async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(widget._postController)));
+    if (result != null) {
+      _scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text('$result')));
 
-    setState(() {
-      _counter = newCounter;
-      _title = '$titlePrefix$_counter';
-    });
+      Future.delayed(const Duration(milliseconds: _snackbarSleep), () {
+        
+      });
+      _setCounter();
+    }
   }
 
   Future<int> _getCounter() async {
@@ -52,9 +56,9 @@ class _PostListState extends State<PostList> {
   }
 
   void _setCounter() async {
-    _counter = await _getCounter();
+     var counter = await _getCounter();
     setState(() {
-      _title = '$titlePrefix$_counter';
+      _title = '$titlePrefix$counter';
     });
   }
 
@@ -77,29 +81,12 @@ class _PostListState extends State<PostList> {
     );
   }
 
-  _navigateToFormAndDisplayResult(BuildContext context) async {
-    final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => AddEntryView(widget._postController)));
-    if (result != null || result == null) {
-      _scaffoldKey.currentState
-        ..removeCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text('$result')));
-
-      Future.delayed(const Duration(milliseconds: _snackbarSleep), () {
-        setState(() {
-          //refresh the page after snackbar is shown
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PostList()));
-        });
-      });
-    }
-  }
-
   void _hideOverlay() {
     _overlayEntry.remove();
   }
 
   void _insertOverlay(BuildContext context,Post post) {
     _overlayEntry =   OverlayEntry(builder: (context) {
-      var size = MediaQuery.of(context).size;
       return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false, //override back button
@@ -160,8 +147,8 @@ class _PostListState extends State<PostList> {
     return StreamBuilder(
       stream: widget._postController.readPosts(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+        if (!snapshot.hasData || snapshot.data.documents.length < 1) {
+          return Center(child: CircularProgressIndicator());
         } else {
           return ListView.separated(
             padding: EdgeInsets.fromLTRB(0, 0, 0, bottomPadding),
@@ -189,6 +176,7 @@ class _PostListState extends State<PostList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Center(child: Text(_title)),
       ),
@@ -196,8 +184,7 @@ class _PostListState extends State<PostList> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         heroTag: 'main',
-        
-        onPressed: () => _getImageAndCreatePost(context),
+        onPressed: () => _getImageAndNavToForm(context),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), 

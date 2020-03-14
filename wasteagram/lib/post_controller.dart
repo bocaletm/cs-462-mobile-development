@@ -2,6 +2,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:location/location.dart';
 import 'package:wasteagram/helpers/exceptions.dart';
+import 'package:wasteagram/helpers/image_proc.dart';
 import 'package:wasteagram/models/post.dart';
 
 class PostController {
@@ -13,21 +14,26 @@ class PostController {
 
   String getLastUploaded() => _post?.imageUrl != null ? _post?.imageUrl : '';
 
-  Future createPost(dynamic image, String title, int count) async {
+  Future<bool> createPost(dynamic image, String title, int count) async {
     try {
       final LocationData _locationData = await _getLatitudeAndLongitude();
       await _uploadImage(image, _locationData.latitude, _locationData.longitude, count, title);
       await _addToDB();
+      return true;
     } catch(e) {
+      print('ERROR: createPost() failed to create post');
       print(e);
+      return false;
     }
   }
   
-  Future _uploadImage(dynamic image, double latitude, double longitude, int count, String title) async {
+  Future _uploadImage(String imgBase64, double latitude, double longitude, int count, String title) async {
     String url;
+    var imageFile = await ImageProc.imageFileFromData(ImageProc.dataFromBase64(imgBase64));
+    print(imageFile);
     StorageReference storageReference = 
       FirebaseStorage.instance.ref().child('${title}_${DateTime.now().millisecondsSinceEpoch.toString()}');
-    StorageUploadTask uploadTask = storageReference.putFile(image);
+    StorageUploadTask uploadTask = storageReference.putFile(imageFile);
     await uploadTask.onComplete;
     url = await storageReference.getDownloadURL();
     print('Successfully uploaded $url');
@@ -37,7 +43,7 @@ class PostController {
       print('Populated Post object');
       print(_post.toJson().toString());
     } else {
-      if (image == null) throw ImageUploadException('ImagePicker error, image is null');
+      if (imageFile == null) throw ImageUploadException('File I/O error, image is null');
       if (storageReference == null) throw ImageUploadException('unable to obtain storage reference');
       throw ImageUploadException('unable to obtain image url from storage');
     }
@@ -96,7 +102,6 @@ class PostController {
   }
 
   Future<dynamic> getCounter() async {
-
     var count = Firestore.instance
         .collection(firestoreCounter)
         .orderBy(firestoreCounter)
@@ -107,8 +112,6 @@ class PostController {
   }
 
   Post postFromData(dynamic data) {
-    //  Post(this.imageUrl, this.date, this.count, this.name, this.latitude, this.longitude) {
-    //return Post(data['date'],)
     dynamic newMap = data;
     newMap['date'] = data['date'].toDate();
     return Post.fromJson(newMap);

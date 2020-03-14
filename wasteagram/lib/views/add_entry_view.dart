@@ -7,7 +7,7 @@ class AddEntryView extends StatefulWidget {
 
   AddEntryView(this._postController, {Key key}) : super(key: key);
 
-  PostController _postController;
+  final PostController _postController;
 
   @override
   _AddEntryViewState createState() => _AddEntryViewState();

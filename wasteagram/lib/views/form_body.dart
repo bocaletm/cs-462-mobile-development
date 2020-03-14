@@ -6,7 +6,7 @@ class FormBody extends StatefulWidget {
 
   FormBody(this._postController, {Key key}) : super(key: key);
 
-  PostController _postController;
+  final PostController _postController;
 
   @override
   _FormBodyState createState() => _FormBodyState();
@@ -17,8 +17,6 @@ class _FormBodyState extends State<FormBody> {
   static const _emptyFieldMsg = 'Please enter the count of items here';
   static const _notIntMsg = 'Please enter intems (1-1000)';
   static const _ratingLabel = 'Item Count';
-  static const _saveLabel = 'Save';
-  static const _cancelLabel = 'Cancel';
   static const _saveSuccess = 'Post Saved';
   static const _saveFailure = 'Error Saving Post';
   static const _maxCount = 1000;
@@ -49,15 +47,24 @@ class _FormBodyState extends State<FormBody> {
           onPressed: () async {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              int id = 0;
-              id > 0 ? _submitMsg = _saveSuccess : _submitMsg = _saveFailure;
-              Navigator.pop(context, _submitMsg);
             }
           },
           child: Icon(Icons.cloud_upload,color: Colors.white),
         ),
       ],
     );
+  }
+
+  void _savePost(int count) async {
+    String imageBase64 = await ImageProc.loadImageFromCache();
+    bool success = await widget._postController.createPost(imageBase64, 'New Item', count);
+    if (success) {
+      _submitMsg = _saveSuccess;
+      widget._postController.incrementCounter();
+    } else {
+      _submitMsg = _saveFailure;
+    }
+    Navigator.pop(context, _submitMsg);
   }
 
   Widget _entryForm(BuildContext context) {
@@ -91,8 +98,9 @@ class _FormBodyState extends State<FormBody> {
                   labelText: _ratingLabel,
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.number,
                 validator: (value) => _validateInt(value),
-                onSaved: (value) => print(value),
+                onSaved: (value) => _savePost(int.parse(value)),
               ),
               Divider(),
               _buttons(context),
