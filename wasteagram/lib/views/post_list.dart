@@ -20,6 +20,7 @@ class _PostListState extends State<PostList> {
   _PostListState();
 
   static const String titlePrefix = 'Wasteagram ';
+  static const String _tileLabel = 'Show post detail view';
 
   static const _snackbarSleep = 1500;
 
@@ -41,7 +42,7 @@ class _PostListState extends State<PostList> {
     if (result != null) {
       _scaffoldKey.currentState
         ..removeCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text('$result')));
+        ..showSnackBar(SnackBar(backgroundColor: snackbarColorFromValue(result), content: Text('$result')));
 
       Future.delayed(const Duration(milliseconds: _snackbarSleep), () {
         
@@ -66,16 +67,24 @@ class _PostListState extends State<PostList> {
     const double widthFactor = 0.09;
     const double heightFactor = 0.09;
     var size = MediaQuery.of(context).size;
-    return ListTile(
-      title: Text(post.dateString),
-      leading: Icon(Icons.image),
-      trailing: Container(
-        height: size.height * heightFactor,
-        width: size.width * widthFactor,
-        child: FloatingActionButton(
-          heroTag: post.date.toString(),
-          child: Text(post.count.toString()),
-          onPressed: () => _insertOverlay(context, post),
+    return Semantics(
+      label: _tileLabel,
+      focusable: true,
+      child: GestureDetector(
+        onTap: () => _insertOverlay(context, post),
+        child: ListTile(
+          title: Text(post.dateString),
+          leading: Icon(Icons.image),
+          trailing: Container(
+            height: size.height * heightFactor,
+            width: size.width * widthFactor,
+            child: FloatingActionButton(
+              heroTag: post.date.toString(),
+              backgroundColor: Colors.blueGrey,
+              child: Text(post.count.toString()),
+              onPressed: () => _insertOverlay(context, post),
+            ),
+          ),
         ),
       ),
     );
@@ -130,10 +139,10 @@ class _PostListState extends State<PostList> {
                   Text('Items: ${post.count.toString()}'),
                   Divider(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    Text('Latitude: ${post.latitude.toString()}'),
-                    Text('Longitude: ${post.longitude.toString()}'),
+                    Text('(${post.latitude.toString()}, '),
+                    Text('${post.longitude.toString()})'),
                   ]),
               ]),
             ),

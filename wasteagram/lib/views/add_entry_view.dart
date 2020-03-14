@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:wasteagram/views/form_body.dart';
 import 'package:wasteagram/post_controller.dart';
 
-
 class AddEntryView extends StatefulWidget {
 
   AddEntryView(this._postController, {Key key}) : super(key: key);

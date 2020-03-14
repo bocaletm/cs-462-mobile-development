@@ -17,8 +17,10 @@ class _FormBodyState extends State<FormBody> {
   static const _emptyFieldMsg = 'Please enter the count of items here';
   static const _notIntMsg = 'Please enter intems (1-1000)';
   static const _ratingLabel = 'Item Count';
-  static const _saveSuccess = 'Post Saved';
-  static const _saveFailure = 'Error Saving Post';
+  static const _saveSuccess = 'Post saved successfully';
+  static const _saveFailure = 'Error saving post';
+  static const _submitSemantics = 'Upload post to cloud';
+  static const _semanticsInputLabel = 'Enter item count';
   static const _maxCount = 1000;
   static const _minCount = 1;
 
@@ -49,7 +51,7 @@ class _FormBodyState extends State<FormBody> {
               _formKey.currentState.save();
             }
           },
-          child: Icon(Icons.cloud_upload,color: Colors.white),
+          child: Semantics(button: true, label: _submitSemantics, child: Icon(Icons.cloud_upload,color: Colors.white)),
         ),
       ],
     );
@@ -92,15 +94,19 @@ class _FormBodyState extends State<FormBody> {
                 ),
               ),
               Divider(),
-              TextFormField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  labelText: _ratingLabel,
-                  border: OutlineInputBorder(),
+              Semantics(
+                textField: true,
+                label: _semanticsInputLabel,
+                child: TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: _ratingLabel,
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) => _validateInt(value),
+                  onSaved: (value) => _savePost(int.parse(value)),
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) => _validateInt(value),
-                onSaved: (value) => _savePost(int.parse(value)),
               ),
               Divider(),
               _buttons(context),

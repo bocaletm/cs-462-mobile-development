@@ -14,3 +14,9 @@ Widget formattedPhoto(String url) {
       ),
   );
 }
+
+Color snackbarColorFromValue(result) {
+  var color;
+  result.toLowerCase().contains('error') ? color =  Colors.red : color = Colors.green;
+  return color;
+}
