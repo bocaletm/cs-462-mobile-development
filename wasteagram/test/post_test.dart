@@ -5,7 +5,7 @@ import 'package:wasteagram/post_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
-  group("initialization and parsing:", () {
+  group('initialization and parsing:', () {
     var dateString = '2020-03-14 15:11:40.615156';
     var url = 'www.test.com';  
     var date = DateTime.parse('2020-03-14 15:11:40.615156');   
@@ -14,7 +14,7 @@ void main() {
     var longitude = 1.0;    
     final testPost = Post(url,date,count,'title',latitude,longitude);
    
-    test("test initialization", () {     
+    test('initialization', () {     
         expect(testPost.imageUrl, isNotNull);
         expect(testPost.date, isNotNull);
         expect(testPost.dateString, isNotNull);
@@ -23,7 +23,7 @@ void main() {
         expect(testPost.longitude, isNotNull);
         expect(testPost.date.toString(), equals(dateString)); 
     });
-    test('test parsing', () {
+    test('parsing', () {
       var jsonPost = testPost.toJson();
       jsonPost['date'] = Timestamp.fromDate(date); //mimic date returned from firebase
       var postFromJson = PostController.postFromData(jsonPost);

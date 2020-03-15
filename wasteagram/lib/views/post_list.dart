@@ -187,7 +187,7 @@ class _PostListState extends State<PostList> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Center(child: Text(_title, style: TextStyle(fontWeight: FontWeight.w700))),
+        title: Center(child: Text(_title, key: Key('post_list_title'), style: TextStyle(fontWeight: FontWeight.w700))),
       ),
       body: _streamedListView(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
