@@ -45,7 +45,7 @@ class _FormBodyState extends State<FormBody> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         RaisedButton(
-          color: Colors.blue,
+          color: Colors.teal,
           onPressed: () async {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();

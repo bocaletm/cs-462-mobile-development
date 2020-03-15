@@ -30,3 +30,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+  - family: Source
+    fonts:
+    - asset: assets/SourceSansPro-Regular.otf
+    - asset: assets/SourceSansPro-It.otf
+      style: italic
+    - asset: assets/SourceSansPro-Semibold.otf
+      weight: 700

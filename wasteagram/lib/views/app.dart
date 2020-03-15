@@ -16,7 +16,16 @@ class _AppState extends State<App> {
     return MaterialApp(
       title: 'Wasteagram',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
+        fontFamily: 'Source',
+        textTheme: TextTheme(
+          caption: TextStyle(
+            fontSize: 26.0
+          ),
+          body1: TextStyle(
+            fontSize: 24.0
+          ),
+        ),
       ),
       home: PostList(),
     );

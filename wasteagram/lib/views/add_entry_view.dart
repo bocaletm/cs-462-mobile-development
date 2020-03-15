@@ -22,7 +22,7 @@ class _AddEntryViewState extends State<AddEntryView> {
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
           appBar: AppBar(
-            title: Center(child: Text(_title)),
+            title: Center(child: Text(_title, style: TextStyle(fontWeight: FontWeight.w700))),
           ),
           body: FormBody(widget._postController),
         );
